@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.all_data.AllDataActivity"
+    android:orientation="vertical"
+    android:background="#ffffff">
+
+    <FrameLayout
+        android:id="@+id/allDataFragmentFL"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.9"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@drawable/border">
+
+        <ImageButton
+            android:id="@+id/allProfilesTabButton"
+            android:layout_width="0dp"
+            android:layout_weight="0.3"
+            android:layout_height="40dp"
+            android:text="@string/all_profiles"
+            android:onClick="setFragment"
+            android:background="#ffffff"
+            android:layout_gravity="bottom"
+            android:src="@drawable/ic_people_blue"/>
+        <ImageButton
+            android:id="@+id/allRecordsTabButton"
+            android:layout_width="0dp"
+            android:layout_weight="0.3"
+            android:layout_height="40dp"
+            android:text="@string/all_records"
+            android:onClick="setFragment"
+            android:background="#ffffff"
+            android:layout_gravity="bottom"
+            android:src="@drawable/ic_records_grey"/>
+        <ImageButton
+            android:id="@+id/myProfileTabButton"
+            android:layout_width="0dp"
+            android:layout_weight="0.3"
+            android:layout_height="40dp"
+            android:text="@string/my_profile"
+            android:onClick="setFragment"
+            android:background="#ffffff"
+            android:layout_gravity="bottom"
+            android:src="@drawable/ic_my_profile_grey"/>
+    </LinearLayout>
+
+</LinearLayout>

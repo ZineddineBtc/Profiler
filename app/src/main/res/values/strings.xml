@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Profiler</string>
+    <string name="add">Add</string>
+    <string name="search">Search</string>
+    <string name="all_profiles">All Profiles</string>
+    <string name="all_records">All Records</string>
+    <string name="empty_profiles_list">No profiles to show</string>
+    <string name="empty_records_list">No records to show</string>
+    <string name="save">save</string>
+    <string name="show_records">Show profile records</string>
+    <string name="delete">delete</string>
+    <string name="empty_name">Name must not be empty</string>
+    <string name="empty_title">Title must not be empty</string>
+    <string name="my_profile">My Profile</string>
+</resources>
