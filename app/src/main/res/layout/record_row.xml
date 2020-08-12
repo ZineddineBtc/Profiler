@@ -108,18 +108,17 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_image_grey"
         android:layout_marginTop="5dp"
-        android:scaleType="center"/>
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"/>
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPagerAdapter"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:clipToPadding="false"
         android:background="@drawable/white_background_rounded_border"/>
     <LinearLayout
         android:id="@+id/dotLayoutAdapter"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginBottom="20dp"
+        android:layout_height="30dp"
         android:gravity="center"
         android:orientation="horizontal">
     </LinearLayout>

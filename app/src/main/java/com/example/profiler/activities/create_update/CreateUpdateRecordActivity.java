@@ -228,7 +228,8 @@ public class CreateUpdateRecordActivity extends AppCompatActivity {
         CustomPagerAdapter pagerAdapter = new CustomPagerAdapter(getApplicationContext(), pagerImagesList);
         viewPager.setAdapter(pagerAdapter);
         viewPager.setPageMargin(20);
-        addDot(0);
+        CommonClass.addDot(getApplicationContext(), pagerImagesList,
+                0, dot, dotLayout);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int i, float v, int i1) {
@@ -236,26 +237,14 @@ public class CreateUpdateRecordActivity extends AppCompatActivity {
             }
             @Override
             public void onPageSelected(int i) {
-                addDot(i);
+                CommonClass.addDot(getApplicationContext(), pagerImagesList,
+                        i, dot, dotLayout);
             }
             @Override
             public void onPageScrollStateChanged(int i) {
 
             }
         });
-    }
-
-    public void addDot(int pagePosition) {
-        dot = new TextView[pagerImagesList.size()];
-        dotLayout.removeAllViews();
-        for (int i = 0; i < dot.length; i++) {;
-            dot[i] = new TextView(this);
-            dot[i].setText(Html.fromHtml("&#9673;"));
-            dot[i].setTextSize(35);
-            dot[i].setTextColor(getColor(R.color.dark_grey));
-            dotLayout.addView(dot[i]);
-        }
-        dot[pagePosition].setTextColor(getColor(R.color.blue));
     }
 
     public void setActionBarTitle(String title){

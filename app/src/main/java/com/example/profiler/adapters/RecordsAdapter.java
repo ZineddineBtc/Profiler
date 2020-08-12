@@ -263,7 +263,7 @@ public class RecordsAdapter extends RecyclerView.Adapter<RecordsAdapter.ViewHold
             for (int i = 0; i < dot.length; i++) {
                 dot[i] = new TextView(itemView.getContext());
                 dot[i].setText(Html.fromHtml("&#9673;"));
-                dot[i].setTextSize(35);
+                dot[i].setTextSize(14);
                 dot[i].setTextColor(itemView.getContext().getColor(R.color.dark_grey));
                 dotLayout.addView(dot[i]);
             }

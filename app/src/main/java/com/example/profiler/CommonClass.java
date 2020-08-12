@@ -8,15 +8,16 @@ import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.text.Html;
 import android.util.Base64;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.core.app.ActivityCompat;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 
 public class CommonClass {
 
-    public static int takeFlags;
     public static int PICK_SINGLE_IMAGE = 1;
     public static int PICK_MULTIPLE_IMAGES = 2;
     public static int myProfileID = 1;
@@ -65,7 +66,7 @@ public class CommonClass {
         byte [] b=baos.toByteArray();
         return Base64.encodeToString(b, Base64.DEFAULT);
     }
-    */
+
     public static boolean hasPermissions(Context context, String... permissions) {
         if (context != null && permissions != null) {
             for (String permission : permissions) {
@@ -75,5 +76,18 @@ public class CommonClass {
             }
         }
         return true;
+    }*/
+    public static void addDot(Context context, ArrayList<Bitmap> pagerImagesList,
+                              int pagePosition, TextView[] dot, LinearLayout dotLayout) {
+        dot = new TextView[pagerImagesList.size()];
+        dotLayout.removeAllViews();
+        for (int i = 0; i < dot.length; i++) {
+            dot[i] = new TextView(context);
+            dot[i].setText(Html.fromHtml("&#9673;"));
+            dot[i].setTextSize(14);
+            dot[i].setTextColor(context.getColor(R.color.dark_grey));
+            dotLayout.addView(dot[i]);
+        }
+        dot[pagePosition].setTextColor(context.getColor(R.color.blue));
     }
 }

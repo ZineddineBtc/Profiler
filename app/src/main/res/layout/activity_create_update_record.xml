@@ -77,20 +77,20 @@
                 android:id="@+id/viewPager"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:clipToPadding="false"
                 android:background="@drawable/white_background_rounded_border"/>
             <LinearLayout
                 android:id="@+id/dotLayout"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginBottom="20dp"
+                android:layout_height="30dp"
                 android:gravity="center"
                 android:orientation="horizontal">
             </LinearLayout>
             <ImageView
                 android:id="@+id/imageIV"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"/>
+                android:layout_height="200dp"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"/>
         </LinearLayout>
     </ScrollView>
     <TextView

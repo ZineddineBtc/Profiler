@@ -82,11 +82,14 @@ public class MyProfileRecordsAdapter extends RecyclerView.Adapter<MyProfileRecor
                 holder.pagerAdapter = new CustomPagerAdapter(context, holder.pagerImagesList);
                 holder.viewPager.setAdapter(holder.pagerAdapter);
                 holder.viewPager.setPageMargin(20);
-                holder.addDot(0);
+                //holder.addDot(0);
+                CommonClass.addDot(context, holder.pagerImagesList,
+                        0, holder.dot, holder.dotLayout);
                 holder.viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                     @Override
                     public void onPageSelected(int i) {
-                        holder.addDot(i);
+                        CommonClass.addDot(context, holder.pagerImagesList,
+                                i, holder.dot, holder.dotLayout);
                     }
                     @Override
                     public void onPageScrolled(int i, float v, int i1) {}
@@ -252,19 +255,6 @@ public class MyProfileRecordsAdapter extends RecyclerView.Adapter<MyProfileRecor
 
             itemView.setOnClickListener(this);
 
-        }
-
-        public void addDot(int pagePosition) {
-            dot = new TextView[pagerImagesList.size()];
-            dotLayout.removeAllViews();
-            for (int i = 0; i < dot.length; i++) {
-                dot[i] = new TextView(itemView.getContext());
-                dot[i].setText(Html.fromHtml("&#9673;"));
-                dot[i].setTextSize(35);
-                dot[i].setTextColor(itemView.getContext().getColor(R.color.dark_grey));
-                dotLayout.addView(dot[i]);
-            }
-            dot[pagePosition].setTextColor(itemView.getContext().getColor(R.color.blue));
         }
 
         @Override
