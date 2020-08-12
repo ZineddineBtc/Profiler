@@ -81,7 +81,7 @@ public class ProfileActivity extends AppCompatActivity {
     public void setProfileUI(){
         if(profileDAO.getProfile(profileID).getPhoto() != null){
             photoIV.setImageBitmap(
-                    CommonClass.pathToBitmap(profileDAO.getProfile(profileID).getPhoto()));
+                    CommonClass.stringToBitmap(profileDAO.getProfile(profileID).getPhoto()));
         }
         nameTV.setText(profileDAO.getProfile(profileID).getName());
         bioTV.setText(profileDAO.getProfile(profileID).getBio());

@@ -69,7 +69,7 @@ public class MyProfileRecordsAdapter extends RecyclerView.Adapter<MyProfileRecor
         );
         if(holder.myProfileDAO.getMyProfile(CommonClass.myProfileID)
                 .getPhoto() != null) {
-            holder.profilePhotoIV.setImageBitmap(CommonClass.pathToBitmap(
+            holder.profilePhotoIV.setImageBitmap(CommonClass.stringToBitmap(
                     holder.myProfileDAO.getMyProfile(CommonClass.myProfileID).getPhoto())
             );
         }

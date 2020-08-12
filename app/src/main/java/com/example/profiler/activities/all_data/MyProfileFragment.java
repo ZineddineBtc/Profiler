@@ -100,7 +100,7 @@ public class MyProfileFragment extends Fragment {
         myProfileLL.setVisibility(View.VISIBLE);
         if(myProfileDAO.getMyProfile(CommonClass.myProfileID).getPhoto() != null){
             photoIV.setImageBitmap(
-                    CommonClass.pathToBitmap(myProfileDAO.getMyProfile(CommonClass.myProfileID).getPhoto()));
+                    CommonClass.stringToBitmap(myProfileDAO.getMyProfile(CommonClass.myProfileID).getPhoto()));
         }
         nameTV.setText(myProfileDAO.getMyProfile(CommonClass.myProfileID).getName());
         bioTV.setText(myProfileDAO.getMyProfile(CommonClass.myProfileID).getBio());

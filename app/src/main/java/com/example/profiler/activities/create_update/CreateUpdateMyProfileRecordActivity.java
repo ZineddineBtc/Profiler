@@ -60,7 +60,7 @@ public class CreateUpdateMyProfileRecordActivity extends AppCompatActivity {
         profileNameTV.setText(myProfileDAO.getMyProfile(profileID).getName());
         profilePhotoIV = findViewById(R.id.profilePhotoIV);
         if(myProfileDAO.getMyProfile(profileID).getPhoto() != null) {
-            profilePhotoIV.setImageBitmap(CommonClass.pathToBitmap(
+            profilePhotoIV.setImageBitmap(CommonClass.stringToBitmap(
                     myProfileDAO.getMyProfile(profileID).getPhoto()));
         }
         titleET = findViewById(R.id.titleET);
@@ -73,7 +73,7 @@ public class CreateUpdateMyProfileRecordActivity extends AppCompatActivity {
         descriptionET.setText(myRecordDAO.getRecord(recordID).getDescription());
         imageString = myRecordDAO.getRecord(recordID).getImage();
         if(imageString != null){
-            imageIV.setImageBitmap(CommonClass.pathToBitmap(imageString));
+            imageIV.setImageBitmap(CommonClass.stringToBitmap(imageString));
         }
         actionBarTitle = "Update Record";
     }
@@ -116,12 +116,12 @@ public class CreateUpdateMyProfileRecordActivity extends AppCompatActivity {
         Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
         chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
 
-        startActivityForResult(chooserIntent, CommonClass.PICK_PHOTO);
+        startActivityForResult(chooserIntent, CommonClass.PICK_SINGLE_IMAGE);
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CommonClass.PICK_PHOTO && resultCode == Activity.RESULT_OK) {
+        if (requestCode == CommonClass.PICK_SINGLE_IMAGE && resultCode == Activity.RESULT_OK) {
             if (data == null) {
                 Toast.makeText(getApplicationContext(), "ERROR", Toast.LENGTH_SHORT).show();
                 return;

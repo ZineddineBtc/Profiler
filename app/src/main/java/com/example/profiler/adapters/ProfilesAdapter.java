@@ -41,7 +41,7 @@ public class ProfilesAdapter extends RecyclerView.Adapter<ProfilesAdapter.ViewHo
         holder.nameTV.setText(profileList.get(position).getName());
         if(profileList.get(position).getPhoto() != null){
             holder.photoIV.setImageBitmap(
-                    CommonClass.pathToBitmap(profileList.get(position).getPhoto()));
+                    CommonClass.stringToBitmap(profileList.get(position).getPhoto()));
         }
     }
 

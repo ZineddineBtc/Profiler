@@ -2,14 +2,11 @@ package com.example.profiler.activities.create_update;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.MediaStore;
 import android.text.Html;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -79,7 +76,7 @@ public class CreateUpdateMyProfileActivity extends AppCompatActivity {
         photoString = myProfileDAO.getMyProfile(CommonClass.myProfileID).getPhoto();
         if(photoString != null){
             photoIV.setImageBitmap(
-                    CommonClass.pathToBitmap(photoString)
+                    CommonClass.stringToBitmap(photoString)
             );
         }
         nameET.setText(myProfileDAO.getMyProfile(CommonClass.myProfileID).getName());
@@ -153,12 +150,12 @@ public class CreateUpdateMyProfileActivity extends AppCompatActivity {
         Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
         chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
 
-        startActivityForResult(chooserIntent, CommonClass.PICK_PHOTO);
+        startActivityForResult(chooserIntent, CommonClass.PICK_SINGLE_IMAGE);
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CommonClass.PICK_PHOTO && resultCode == Activity.RESULT_OK) {
+        if (requestCode == CommonClass.PICK_SINGLE_IMAGE && resultCode == Activity.RESULT_OK) {
             if (data == null) {
                 Toast.makeText(getApplicationContext(), "ERROR", Toast.LENGTH_SHORT).show();
                 return;
