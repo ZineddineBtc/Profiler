@@ -1,11 +1,15 @@
 package com.example.profiler.activities.create_update;
 
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.text.Html;
 import android.text.format.DateFormat;
 import android.view.Menu;
@@ -14,21 +18,26 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.profiler.CommonClass;
 import com.example.profiler.R;
 import com.example.profiler.activities.specific_data.MyProfileRecordsActivity;
+import com.example.profiler.adapters.CustomPagerAdapter;
 import com.example.profiler.daos.MyProfileDAO;
 import com.example.profiler.daos.MyProfileRecordDAO;
 import com.example.profiler.models.Record;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class CreateUpdateMyProfileRecordActivity extends AppCompatActivity {
@@ -40,6 +49,12 @@ public class CreateUpdateMyProfileRecordActivity extends AppCompatActivity {
     EditText titleET, descriptionET;
     int profileID, recordID;
     String imageString=null, dateString, actionBarTitle="New Record";
+
+    ViewPager viewPager;
+    ArrayList<Bitmap> pagerImagesList;
+    LinearLayout dotLayout;
+    TextView[] dot;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +69,10 @@ public class CreateUpdateMyProfileRecordActivity extends AppCompatActivity {
         }
         dateString = (String) DateFormat.format("dd-MM-yyyy",new java.util.Date());
         setActionBarTitle(actionBarTitle);
+
+        pagerImagesList = new ArrayList<>();
+        viewPager = findViewById(R.id.viewPager);
+        dotLayout = findViewById(R.id.dotLayout);
     }
     public void findViewsByIds(){
         profileNameTV = findViewById(R.id.profileNameTV);
@@ -106,41 +125,118 @@ public class CreateUpdateMyProfileRecordActivity extends AppCompatActivity {
     }
 
     public void importImage(View view){
-        Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
-        getIntent.setType("image/*");
-        getIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-
-        Intent pickIntent = new Intent(Intent.ACTION_PICK);
-        pickIntent.setDataAndType(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-
-        Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
-        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
-
-        startActivityForResult(chooserIntent, CommonClass.PICK_SINGLE_IMAGE);
+        Intent intent;
+        intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        intent.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+        intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.setType("image/*");
+        startActivityForResult(
+                Intent.createChooser(intent, "Select Images"),
+                CommonClass.PICK_MULTIPLE_IMAGES);
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CommonClass.PICK_SINGLE_IMAGE && resultCode == Activity.RESULT_OK) {
-            if (data == null) {
-                Toast.makeText(getApplicationContext(), "ERROR", Toast.LENGTH_SHORT).show();
-                return;
+        if (requestCode == CommonClass.PICK_MULTIPLE_IMAGES && resultCode == RESULT_OK
+                && data != null) {
+            if(data.getClipData() != null){
+                ClipData clipData = data.getClipData();
+                ArrayList<Uri> uriList = new ArrayList<>();
+                for (int i=0; i<clipData.getItemCount(); i++) {
+
+                    ClipData.Item item = clipData.getItemAt(i);
+                    Uri uri = item.getUri();
+                    uriList.add(uri);
+                }
+                final int takeFlags = data.getFlags() & Intent.FLAG_GRANT_READ_URI_PERMISSION;
+                ContentResolver resolver = this.getContentResolver();
+                for (Uri uri : uriList) {
+                    resolver.takePersistableUriPermission(uri, takeFlags);
+                }
+                try {
+                    StringBuilder multipleImagesStringBuilder = new StringBuilder();
+                    for(int i=0; i<uriList.size(); i++){
+                        pagerImagesList.add(MediaStore.Images.Media.getBitmap(
+                                this.getContentResolver(), uriList.get(i)));
+                        multipleImagesStringBuilder.append(uriList.get(i));
+                        if(i != uriList.size()-1){
+                            multipleImagesStringBuilder.append(",");
+                        }
+                        imageString = String.valueOf(multipleImagesStringBuilder);
+                    }
+                    imageIV.setVisibility(View.GONE);
+                    viewPager.setVisibility(View.VISIBLE);
+                    dotLayout.setVisibility(View.VISIBLE);
+                    initializePagerView();
+                } catch (IOException e) {
+                    Toast.makeText(this, "IO Exception",
+                            Toast.LENGTH_LONG).show();
+                }
+            }else{ // a single image
+                viewPager.setVisibility(View.GONE);
+                dotLayout.setVisibility(View.GONE);
+                imageIV.setVisibility(View.VISIBLE);
+                Uri uri = data.getData();
+                if(uri != null){
+                    final int takeFlags = data.getFlags() & Intent.FLAG_GRANT_READ_URI_PERMISSION;
+                    ContentResolver resolver = this.getContentResolver();
+                    resolver.takePersistableUriPermission(uri, takeFlags);
+
+                    Bitmap imageBitmap = null;
+                    try {
+                        imageBitmap = MediaStore.Images.Media.getBitmap(
+                                this.getContentResolver(), uri);
+                    } catch (IOException e) {
+                        Toast.makeText(this, "IO Exception when selecting a single image",
+                                Toast.LENGTH_LONG).show();
+                    }
+                    imageIV.setImageBitmap(imageBitmap);
+                    imageString = uri.toString();
+                }
             }
-            InputStream inputStream = null;
-            try {
-                inputStream = getApplicationContext().getContentResolver().openInputStream(Objects.requireNonNull(data.getData()));
-            } catch (FileNotFoundException e) {
-                Toast.makeText(getApplicationContext(), "File not found exception", Toast.LENGTH_SHORT).show();
-            }
-            if(inputStream!=null){
-                Bitmap imageBitmap = BitmapFactory.decodeStream(inputStream);
-                imageIV.setImageBitmap(imageBitmap);
-                imageString = CommonClass.drawableToString(imageIV.getDrawable());
-            }else{
-                Toast.makeText(getApplicationContext(), "inputStream is null", Toast.LENGTH_SHORT).show();
-            }
+        }else{
+            Toast.makeText(this, "You haven't picked Image",
+                    Toast.LENGTH_LONG).show();
         }
     }
+
+    public void initializePagerView(){
+        CustomPagerAdapter pagerAdapter = new CustomPagerAdapter(getApplicationContext(), pagerImagesList);
+        viewPager.setAdapter(pagerAdapter);
+        viewPager.setPageMargin(20);
+        addDot(0);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
+
+            }
+            @Override
+            public void onPageSelected(int i) {
+                addDot(i);
+            }
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
+    }
+
+    public void addDot(int pagePosition) {
+        dot = new TextView[pagerImagesList.size()];
+        dotLayout.removeAllViews();
+        for (int i = 0; i < dot.length; i++) {;
+            dot[i] = new TextView(this);
+            dot[i].setText(Html.fromHtml("&#9673;"));
+            dot[i].setTextSize(35);
+            dot[i].setTextColor(getColor(R.color.dark_grey));
+            dotLayout.addView(dot[i]);
+        }
+        dot[pagePosition].setTextColor(getColor(R.color.blue));
+    }
+
     public void setActionBarTitle(String title){
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         Objects.requireNonNull(getSupportActionBar()).setHomeAsUpIndicator(R.drawable.ic_profiles_blue);

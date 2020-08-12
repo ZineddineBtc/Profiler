@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class MyProfileRecordDAO extends SQLiteOpenHelper {
 
-    public static final String DATABASE_NAME = "my_profile_records.db";
+    public static final String DATABASE_NAME = "-1.db";
     public static final String RECORD_TABLE_NAME = "record";
     public static final String RECORD_ID = "id";
     public static final String RECORD_TITLE = "title";

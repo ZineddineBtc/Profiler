@@ -5,6 +5,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.text.Html;
 import android.util.Base64;
 import android.view.LayoutInflater;
@@ -13,9 +15,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.profiler.CommonClass;
 import com.example.profiler.R;
@@ -25,6 +29,7 @@ import com.example.profiler.daos.MyProfileDAO;
 import com.example.profiler.daos.MyProfileRecordDAO;
 import com.example.profiler.models.Record;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,17 +55,62 @@ public class MyProfileRecordsAdapter extends RecyclerView.Adapter<MyProfileRecor
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.titleTV.setText(recordList.get(position).getTitle());
         if(!recordList.get(position).getDescription().isEmpty()){
             holder.descriptionTV.setText(recordList.get(position).getDescription());
         }else{
             holder.descriptionTV.setVisibility(View.GONE);
         }
-        if(recordList.get(position).getImage() != null) {
-            holder.imageIV.setImageBitmap(stringToBitmap(recordList.get(position).getImage()));
-        }else{
-            holder.imageIV.setImageBitmap(null);
+        String imageString = recordList.get(position).getImage();
+        if(imageString != null) {
+            if(imageString.contains(",")){ // viewPager
+                String[] multipleImagesString = imageString.split(",");
+                for(String imgStr: multipleImagesString){
+                    try {
+                        holder.pagerImagesList.add(
+                                MediaStore.Images.Media.getBitmap(
+                                        context.getContentResolver(), Uri.parse(imgStr))
+                        );
+                    } catch (IOException e) {
+                        Toast.makeText(context, "IO Exception", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                holder.viewPager.setVisibility(View.VISIBLE);
+                holder.dotLayout.setVisibility(View.VISIBLE);
+                holder.imageIV.setVisibility(View.GONE);
+                holder.pagerAdapter = new CustomPagerAdapter(context, holder.pagerImagesList);
+                holder.viewPager.setAdapter(holder.pagerAdapter);
+                holder.viewPager.setPageMargin(20);
+                holder.addDot(0);
+                holder.viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                    @Override
+                    public void onPageSelected(int i) {
+                        holder.addDot(i);
+                    }
+                    @Override
+                    public void onPageScrolled(int i, float v, int i1) {}
+                    @Override
+                    public void onPageScrollStateChanged(int i) {}
+                });
+            }else{ // a single image
+                holder.viewPager.setVisibility(View.GONE);
+                holder.dotLayout.setVisibility(View.GONE);
+                holder.imageIV.setVisibility(View.VISIBLE);
+                Bitmap imageBitmap = null;
+                try {
+                    imageBitmap = MediaStore.Images.Media.getBitmap(
+                            context.getContentResolver(), Uri.parse(imageString));
+                } catch (IOException e) {
+                    Toast.makeText(context, "IO Exception when adapting a single image",
+                            Toast.LENGTH_LONG).show();
+                }
+                holder.imageIV.setImageBitmap(imageBitmap);
+            }
+        }else{ // no image
+            holder.viewPager.setVisibility(View.GONE);
+            holder.dotLayout.setVisibility(View.GONE);
+            holder.imageIV.setVisibility(View.GONE);
         }
         holder.timeTV.setText(recordList.get(position).getTime());
 
@@ -92,8 +142,17 @@ public class MyProfileRecordsAdapter extends RecyclerView.Adapter<MyProfileRecor
         MyProfileDAO myProfileDAO;
         MyProfileRecordDAO myProfileRecordDAO;
 
+        ViewPager viewPager;
+        CustomPagerAdapter pagerAdapter;
+        ArrayList<Bitmap> pagerImagesList;
+        LinearLayout dotLayout;
+        TextView[] dot;
+
+        View itemView;
+
         public ViewHolder(final View itemView) {
             super(itemView);
+            this.itemView = itemView;
 
             myProfileRecordDAO = new MyProfileRecordDAO(itemView.getContext());
             myProfileDAO = new MyProfileDAO(itemView.getContext());
@@ -110,6 +169,10 @@ public class MyProfileRecordsAdapter extends RecyclerView.Adapter<MyProfileRecor
             deleteTV = itemView.findViewById(R.id.deleteTV);
             toggleRecord = itemView.findViewById(R.id.toggleInfoIV);
             editDeleteRecordLL = itemView.findViewById(R.id.editDeleteRecordLL);
+
+            viewPager = itemView.findViewById(R.id.viewPagerAdapter);
+            dotLayout = itemView.findViewById(R.id.dotLayoutAdapter);
+            pagerImagesList = new ArrayList<>();
 
             toggleRecord.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -182,6 +245,19 @@ public class MyProfileRecordsAdapter extends RecyclerView.Adapter<MyProfileRecor
 
             itemView.setOnClickListener(this);
 
+        }
+
+        public void addDot(int pagePosition) {
+            dot = new TextView[pagerImagesList.size()];
+            dotLayout.removeAllViews();
+            for (int i = 0; i < dot.length; i++) {
+                dot[i] = new TextView(itemView.getContext());
+                dot[i].setText(Html.fromHtml("&#9673;"));
+                dot[i].setTextSize(35);
+                dot[i].setTextColor(itemView.getContext().getColor(R.color.dark_grey));
+                dotLayout.addView(dot[i]);
+            }
+            dot[pagePosition].setTextColor(itemView.getContext().getColor(R.color.blue));
         }
 
         @Override
