@@ -5,12 +5,15 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.text.Html;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -29,6 +32,7 @@ import com.example.profiler.daos.ProfileDAO;
 import com.example.profiler.models.Profile;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
 
@@ -77,9 +81,15 @@ public class CreateUpdateProfileActivity extends AppCompatActivity {
     public void setUpdateUI(){
         photoString = profileDAO.getProfile(profileID).getPhoto();
         if(photoString != null){
-            photoIV.setImageBitmap(
-                    CommonClass.stringToBitmap(photoString)
-            );
+            Bitmap imageBitmap = null;
+            try {
+                imageBitmap = MediaStore.Images.Media.getBitmap(
+                        getApplicationContext().getContentResolver(), Uri.parse(photoString));
+            } catch (IOException e) {
+                Toast.makeText(getApplicationContext(), "IO Exception when adapting a profile image",
+                        Toast.LENGTH_LONG).show();
+            }
+            photoIV.setImageBitmap(imageBitmap);
         }
         nameET.setText(profileDAO.getProfile(profileID).getName());
         bioET.setText(profileDAO.getProfile(profileID).getBio());
@@ -142,17 +152,17 @@ public class CreateUpdateProfileActivity extends AppCompatActivity {
     }
 
     public void importImage(View view){
-        Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
-        getIntent.setType("image/*");
-
-        Intent pickIntent = new Intent(Intent.ACTION_PICK);
-        pickIntent.setDataAndType(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-
-        Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
-        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
-
-        startActivityForResult(chooserIntent, CommonClass.PICK_SINGLE_IMAGE);
+        Intent intent;
+        intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+        intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.setType("image/*");
+        startActivityForResult(
+                Intent.createChooser(intent, "Select Images"),
+                CommonClass.PICK_SINGLE_IMAGE);
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -161,18 +171,22 @@ public class CreateUpdateProfileActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "ERROR", Toast.LENGTH_SHORT).show();
                 return;
             }
-            InputStream inputStream = null;
-            try {
-                inputStream = getApplicationContext().getContentResolver().openInputStream(Objects.requireNonNull(data.getData()));
-            } catch (FileNotFoundException e) {
-                Toast.makeText(getApplicationContext(), "File not found exception", Toast.LENGTH_SHORT).show();
-            }
-            if(inputStream!=null){
-                Bitmap imageBitmap = BitmapFactory.decodeStream(inputStream);
+            Uri uri = data.getData();
+            if(uri != null){
+                final int takeFlags = data.getFlags() & Intent.FLAG_GRANT_READ_URI_PERMISSION;
+                ContentResolver resolver = this.getContentResolver();
+                resolver.takePersistableUriPermission(uri, takeFlags);
+
+                Bitmap imageBitmap = null;
+                try {
+                    imageBitmap = MediaStore.Images.Media.getBitmap(
+                            this.getContentResolver(), uri);
+                } catch (IOException e) {
+                    Toast.makeText(this, "IO Exception when selecting a profile image",
+                            Toast.LENGTH_LONG).show();
+                }
                 photoIV.setImageBitmap(imageBitmap);
-                photoString = CommonClass.drawableToString(photoIV.getDrawable());
-            }else{
-                Toast.makeText(getApplicationContext(), "inputStream is null", Toast.LENGTH_SHORT).show();
+                photoString = uri.toString();
             }
         }
     }

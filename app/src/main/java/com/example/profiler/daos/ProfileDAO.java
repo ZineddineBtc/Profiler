@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class ProfileDAO extends SQLiteOpenHelper {
 
-    public static final String DATABASE_NAME = "6.db";
+    public static final String DATABASE_NAME = "14.db";
     public static final String PROFILE_TABLE_NAME = "profiles";
     public static final String PROFILE_ID = "id";
     public static final String PROFILE_PHOTO = "photo";

@@ -2,11 +2,15 @@ package com.example.profiler.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,6 +19,7 @@ import com.example.profiler.R;
 import com.example.profiler.activities.create_update.CreateUpdateRecordActivity;
 import com.example.profiler.models.Profile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,10 +29,14 @@ public class SelectProfileAdapter extends RecyclerView.Adapter<SelectProfileAdap
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
 
+    Context context;
+
     public SelectProfileAdapter(Context context, List<Profile> profileList) {
         this.mInflater = LayoutInflater.from(context);
         this.profileList = profileList;
         copyList = new ArrayList<>(profileList);
+
+        this.context = context;
     }
 
     @Override
@@ -39,9 +48,17 @@ public class SelectProfileAdapter extends RecyclerView.Adapter<SelectProfileAdap
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.nameTV.setText(profileList.get(position).getName());
-        if(profileList.get(position).getPhoto() != null){
-            holder.photoIV.setImageBitmap(
-                    CommonClass.stringToBitmap(profileList.get(position).getPhoto()));
+        String photoString = profileList.get(position).getPhoto();
+        if(photoString != null){
+            Bitmap imageBitmap = null;
+            try {
+                imageBitmap = MediaStore.Images.Media.getBitmap(
+                        context.getContentResolver(), Uri.parse(photoString));
+            } catch (IOException e) {
+                Toast.makeText(context, "IO Exception",
+                        Toast.LENGTH_LONG).show();
+            }
+            holder.photoIV.setImageBitmap(imageBitmap);
         }
     }
 

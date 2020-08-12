@@ -4,7 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.Html;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,6 +17,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.profiler.CommonClass;
 import com.example.profiler.R;
@@ -23,6 +27,7 @@ import com.example.profiler.activities.create_update.CreateUpdateRecordActivity;
 import com.example.profiler.daos.ProfileDAO;
 import com.example.profiler.daos.RecordDAO;
 
+import java.io.IOException;
 import java.util.Objects;
 
 public class ProfileActivity extends AppCompatActivity {
@@ -79,9 +84,18 @@ public class ProfileActivity extends AppCompatActivity {
         cancelButton = findViewById(R.id.cancelButton);
     }
     public void setProfileUI(){
-        if(profileDAO.getProfile(profileID).getPhoto() != null){
-            photoIV.setImageBitmap(
-                    CommonClass.stringToBitmap(profileDAO.getProfile(profileID).getPhoto()));
+        String photoString = profileDAO.getProfile(profileID).getPhoto();
+        if(photoString != null) {
+            Bitmap imageBitmap = null;
+            try {
+                imageBitmap = MediaStore.Images.Media.getBitmap(
+                        getApplicationContext().getContentResolver(), Uri.parse(photoString));
+            } catch (IOException e) {
+                Toast.makeText(getApplicationContext(),
+                        "IO Exception when adapting a profile image",
+                        Toast.LENGTH_LONG).show();
+            }
+            photoIV.setImageBitmap(imageBitmap);
         }
         nameTV.setText(profileDAO.getProfile(profileID).getName());
         bioTV.setText(profileDAO.getProfile(profileID).getBio());

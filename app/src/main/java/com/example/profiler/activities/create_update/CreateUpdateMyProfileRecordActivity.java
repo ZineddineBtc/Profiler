@@ -78,9 +78,17 @@ public class CreateUpdateMyProfileRecordActivity extends AppCompatActivity {
         profileNameTV = findViewById(R.id.profileNameTV);
         profileNameTV.setText(myProfileDAO.getMyProfile(profileID).getName());
         profilePhotoIV = findViewById(R.id.profilePhotoIV);
-        if(myProfileDAO.getMyProfile(profileID).getPhoto() != null) {
-            profilePhotoIV.setImageBitmap(CommonClass.stringToBitmap(
-                    myProfileDAO.getMyProfile(profileID).getPhoto()));
+        String photoString = myProfileDAO.getMyProfile(profileID).getPhoto();
+        if(photoString != null) {
+            Bitmap imageBitmap = null;
+            try {
+                imageBitmap = MediaStore.Images.Media.getBitmap(
+                        getApplicationContext().getContentResolver(), Uri.parse(photoString));
+            } catch (IOException e) {
+                Toast.makeText(getApplicationContext(), "IO Exception when adapting a profile image",
+                        Toast.LENGTH_LONG).show();
+            }
+            profilePhotoIV.setImageBitmap(imageBitmap);
         }
         titleET = findViewById(R.id.titleET);
         descriptionET = findViewById(R.id.descriptionET);
@@ -92,8 +100,17 @@ public class CreateUpdateMyProfileRecordActivity extends AppCompatActivity {
         descriptionET.setText(myRecordDAO.getRecord(recordID).getDescription());
         imageString = myRecordDAO.getRecord(recordID).getImage();
         if(imageString != null){
-            imageIV.setImageBitmap(CommonClass.stringToBitmap(imageString));
+            Bitmap imageBitmap = null;
+            try {
+                imageBitmap = MediaStore.Images.Media.getBitmap(
+                        getApplicationContext().getContentResolver(), Uri.parse(imageString));
+            } catch (IOException e) {
+                Toast.makeText(getApplicationContext(), "IO Exception when adapting a profile image",
+                        Toast.LENGTH_LONG).show();
+            }
+            imageIV.setImageBitmap(imageBitmap);
         }
+
         actionBarTitle = "Update Record";
     }
     public void saveRecord(){

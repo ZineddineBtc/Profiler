@@ -33,7 +33,7 @@ public class CommonClass {
     public static String CREATE = "create";
     public static String UPDATE = "update";
     public static long showErrorTV = 1500; // 1s
-    public static Bitmap stringToBitmap(String b64) {
+    /*public static Bitmap stringToBitmap(String b64) {
         if(b64==null){
             return null;
         }else{
@@ -65,7 +65,7 @@ public class CommonClass {
         byte [] b=baos.toByteArray();
         return Base64.encodeToString(b, Base64.DEFAULT);
     }
-
+    */
     public static boolean hasPermissions(Context context, String... permissions) {
         if (context != null && permissions != null) {
             for (String permission : permissions) {

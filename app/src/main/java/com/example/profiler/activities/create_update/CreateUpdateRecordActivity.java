@@ -83,9 +83,17 @@ public class CreateUpdateRecordActivity extends AppCompatActivity {
         profileNameTV = findViewById(R.id.profileNameTV);
         profileNameTV.setText(profileDAO.getProfile(profileID).getName());
         profilePhotoIV = findViewById(R.id.profilePhotoIV);
-        if(profileDAO.getProfile(profileID).getPhoto() != null) {
-            profilePhotoIV.setImageBitmap(CommonClass.stringToBitmap(
-                    profileDAO.getProfile(profileID).getPhoto()));
+        String photoString = profileDAO.getProfile(profileID).getPhoto();
+        if(photoString != null) {
+            Bitmap imageBitmap = null;
+            try {
+                imageBitmap = MediaStore.Images.Media.getBitmap(
+                        getApplicationContext().getContentResolver(), Uri.parse(photoString));
+            } catch (IOException e) {
+                Toast.makeText(getApplicationContext(), "IO Exception",
+                        Toast.LENGTH_LONG).show();
+            }
+            profilePhotoIV.setImageBitmap(imageBitmap);
         }
         titleET = findViewById(R.id.titleET);
         descriptionET = findViewById(R.id.descriptionET);

@@ -117,11 +117,18 @@ public class MyProfileRecordsAdapter extends RecyclerView.Adapter<MyProfileRecor
         holder.profileNameTV.setText(
                 holder.myProfileDAO.getMyProfile(CommonClass.myProfileID).getName()
         );
-        if(holder.myProfileDAO.getMyProfile(CommonClass.myProfileID)
-                .getPhoto() != null) {
-            holder.profilePhotoIV.setImageBitmap(CommonClass.stringToBitmap(
-                    holder.myProfileDAO.getMyProfile(CommonClass.myProfileID).getPhoto())
-            );
+        String photoString = holder.myProfileDAO
+                .getMyProfile(CommonClass.myProfileID).getPhoto();
+        if(photoString != null) {
+            Bitmap imageBitmap = null;
+            try {
+                imageBitmap = MediaStore.Images.Media.getBitmap(
+                        context.getContentResolver(), Uri.parse(photoString));
+            } catch (IOException e) {
+                Toast.makeText(context, "IO Exception when adapting a single image",
+                        Toast.LENGTH_LONG).show();
+            }
+            holder.profilePhotoIV.setImageBitmap(imageBitmap);
         }
     }
 

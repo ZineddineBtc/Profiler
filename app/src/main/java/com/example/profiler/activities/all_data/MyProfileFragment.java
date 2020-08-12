@@ -2,7 +2,10 @@ package com.example.profiler.activities.all_data;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +14,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
@@ -22,6 +26,7 @@ import com.example.profiler.activities.specific_data.MyProfileRecordsActivity;
 import com.example.profiler.daos.MyProfileDAO;
 import com.example.profiler.daos.MyProfileRecordDAO;
 
+import java.io.IOException;
 import java.util.Objects;
 
 public class MyProfileFragment extends Fragment {
@@ -33,7 +38,7 @@ public class MyProfileFragment extends Fragment {
             toMyProfileRecordsTV, relationshipStatusTV, occupationTV;
     LinearLayout noMyProfileLL, myProfileLL;
     Button createMyProfileButton;
-    ImageButton updateMyProfileIB;
+    ImageButton createUpdateMyProfileIB;
     MyProfileDAO myProfileDAO;
     MyProfileRecordDAO myRecordDAO;
     boolean noRecords=false;
@@ -49,7 +54,7 @@ public class MyProfileFragment extends Fragment {
         findViewsByIds();
         if(myProfileDAO.numberOfRows() != 0){
             setProfileUI();
-            updateMyProfileIB.setOnClickListener(new View.OnClickListener() {
+            createUpdateMyProfileIB.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     createUpdateMyProfile(CommonClass.UPDATE);
@@ -69,7 +74,7 @@ public class MyProfileFragment extends Fragment {
                 }
             });
         }else{
-            createMyProfileButton.setOnClickListener(new View.OnClickListener() {
+            createUpdateMyProfileIB.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     createUpdateMyProfile(CommonClass.CREATE);
@@ -93,14 +98,24 @@ public class MyProfileFragment extends Fragment {
         noMyProfileLL = fragmentView.findViewById(R.id.noMyProfileLL);
         myProfileLL = fragmentView.findViewById(R.id.myProfileLL);
         createMyProfileButton = fragmentView.findViewById(R.id.createMyProfileButton);
-        updateMyProfileIB = fragmentView.findViewById(R.id.updateMyProfileIB);
+        createUpdateMyProfileIB = fragmentView.findViewById(R.id.updateMyProfileIB);
     }
     public void setProfileUI(){
         noMyProfileLL.setVisibility(View.GONE);
         myProfileLL.setVisibility(View.VISIBLE);
-        if(myProfileDAO.getMyProfile(CommonClass.myProfileID).getPhoto() != null){
-            photoIV.setImageBitmap(
-                    CommonClass.stringToBitmap(myProfileDAO.getMyProfile(CommonClass.myProfileID).getPhoto()));
+        String photoString = myProfileDAO.getMyProfile(CommonClass.myProfileID).getPhoto();
+        if(photoString != null){
+            Bitmap imageBitmap = null;
+            try {
+                imageBitmap = MediaStore.Images.Media.getBitmap(
+                        Objects.requireNonNull(getContext()).
+                                getContentResolver(), Uri.parse(photoString));
+            } catch (IOException e) {
+                Toast.makeText(getContext(),
+                        "IO Exception when adapting a profile image",
+                        Toast.LENGTH_LONG).show();
+            }
+            photoIV.setImageBitmap(imageBitmap);
         }
         nameTV.setText(myProfileDAO.getMyProfile(CommonClass.myProfileID).getName());
         bioTV.setText(myProfileDAO.getMyProfile(CommonClass.myProfileID).getBio());
