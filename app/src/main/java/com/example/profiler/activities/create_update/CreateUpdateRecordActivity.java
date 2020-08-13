@@ -49,7 +49,7 @@ public class CreateUpdateRecordActivity extends AppCompatActivity {
     ImageView profilePhotoIV, imageIV;
     EditText titleET, descriptionET;
     int profileID, recordID;
-    String imageString=null, dateString;
+    String imageString=null, dateString, actionBarTitle = "New Record";
 
     ViewPager viewPager;
     ArrayList<Bitmap> pagerImagesList;
@@ -72,11 +72,9 @@ public class CreateUpdateRecordActivity extends AppCompatActivity {
             setUpdateUI();
         }
         dateString = (String) DateFormat.format("dd-MM-yyyy",new java.util.Date());
-        setActionBarTitle("New Record");
+        setActionBarTitle(actionBarTitle);
 
-        pagerImagesList = new ArrayList<>();
-        viewPager = findViewById(R.id.viewPager);
-        dotLayout = findViewById(R.id.dotLayout);
+
 
     }
     public void findViewsByIds(){
@@ -99,11 +97,50 @@ public class CreateUpdateRecordActivity extends AppCompatActivity {
         descriptionET = findViewById(R.id.descriptionET);
         errorTV = findViewById(R.id.errorTV);
         imageIV = findViewById(R.id.imageIV);
+        pagerImagesList = new ArrayList<>();
+        viewPager = findViewById(R.id.viewPager);
+        dotLayout = findViewById(R.id.dotLayout);
     }
     public void setUpdateUI(){
         titleET.setText(recordDAO.getRecord(recordID).getTitle());
         descriptionET.setText(recordDAO.getRecord(recordID).getDescription());
         imageString = recordDAO.getRecord(recordID).getImage();
+        if(imageString != null) {
+            if(imageString.contains(",")){
+                String[] imageStringUris = imageString.split(",");
+                for(String uriStr: imageStringUris){
+                    Bitmap imageBitmap = null;
+                    try {
+                        imageBitmap = MediaStore.Images.Media.getBitmap(
+                                getApplicationContext().getContentResolver(),
+                                Uri.parse(uriStr));
+                    } catch (IOException e) {
+                        Toast.makeText(getApplicationContext(), "IO Exception",
+                                Toast.LENGTH_LONG).show();
+                    }
+                    pagerImagesList.add(imageBitmap);
+                }
+                initializePagerView();
+                imageIV.setVisibility(View.GONE);
+                viewPager.setVisibility(View.VISIBLE);
+                dotLayout.setVisibility(View.VISIBLE);
+            }else{ // single image
+                Bitmap imageBitmap = null;
+                try {
+                    imageBitmap = MediaStore.Images.Media.getBitmap(
+                            getApplicationContext().getContentResolver(),
+                            Uri.parse(imageString));
+                } catch (IOException e) {
+                    Toast.makeText(getApplicationContext(), "IO Exception",
+                            Toast.LENGTH_LONG).show();
+                }
+                imageIV.setImageBitmap(imageBitmap);
+                imageIV.setVisibility(View.VISIBLE);
+                viewPager.setVisibility(View.GONE);
+                dotLayout.setVisibility(View.GONE);
+            }
+        }
+        actionBarTitle = "Update Record";
     }
     public void saveRecord(){
         if(!titleET.getText().toString().isEmpty()){
@@ -232,18 +269,14 @@ public class CreateUpdateRecordActivity extends AppCompatActivity {
                 0, dot, dotLayout);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onPageScrolled(int i, float v, int i1) {
-
-            }
-            @Override
             public void onPageSelected(int i) {
                 CommonClass.addDot(getApplicationContext(), pagerImagesList,
                         i, dot, dotLayout);
             }
             @Override
-            public void onPageScrollStateChanged(int i) {
-
-            }
+            public void onPageScrolled(int i, float v, int i1) {}
+            @Override
+            public void onPageScrollStateChanged(int i) {}
         });
     }
 

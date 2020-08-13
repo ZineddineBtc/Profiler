@@ -94,21 +94,48 @@ public class CreateUpdateMyProfileRecordActivity extends AppCompatActivity {
         descriptionET = findViewById(R.id.descriptionET);
         imageIV = findViewById(R.id.imageIV);
         errorTV = findViewById(R.id.errorTV);
+        pagerImagesList = new ArrayList<>();
+        viewPager = findViewById(R.id.viewPager);
+        dotLayout = findViewById(R.id.dotLayout);
     }
     public void setUpdateUI(){
         titleET.setText(myRecordDAO.getRecord(recordID).getTitle());
         descriptionET.setText(myRecordDAO.getRecord(recordID).getDescription());
         imageString = myRecordDAO.getRecord(recordID).getImage();
-        if(imageString != null){
-            Bitmap imageBitmap = null;
-            try {
-                imageBitmap = MediaStore.Images.Media.getBitmap(
-                        getApplicationContext().getContentResolver(), Uri.parse(imageString));
-            } catch (IOException e) {
-                Toast.makeText(getApplicationContext(), "IO Exception when adapting a profile image",
-                        Toast.LENGTH_LONG).show();
+        if(imageString != null) {
+            if(imageString.contains(",")){
+                String[] imageStringUris = imageString.split(",");
+                for(String uriStr: imageStringUris){
+                    Bitmap imageBitmap = null;
+                    try {
+                        imageBitmap = MediaStore.Images.Media.getBitmap(
+                                getApplicationContext().getContentResolver(),
+                                Uri.parse(uriStr));
+                    } catch (IOException e) {
+                        Toast.makeText(getApplicationContext(), "IO Exception",
+                                Toast.LENGTH_LONG).show();
+                    }
+                    pagerImagesList.add(imageBitmap);
+                }
+                initializePagerView();
+                imageIV.setVisibility(View.GONE);
+                viewPager.setVisibility(View.VISIBLE);
+                dotLayout.setVisibility(View.VISIBLE);
+            }else{ // single image
+                Bitmap imageBitmap = null;
+                try {
+                    imageBitmap = MediaStore.Images.Media.getBitmap(
+                            getApplicationContext().getContentResolver(),
+                            Uri.parse(imageString));
+                } catch (IOException e) {
+                    Toast.makeText(getApplicationContext(), "IO Exception",
+                            Toast.LENGTH_LONG).show();
+                }
+                imageIV.setImageBitmap(imageBitmap);
+                imageIV.setVisibility(View.VISIBLE);
+                viewPager.setVisibility(View.GONE);
+                dotLayout.setVisibility(View.GONE);
             }
-            imageIV.setImageBitmap(imageBitmap);
         }
 
         actionBarTitle = "Update Record";
@@ -167,10 +194,8 @@ public class CreateUpdateMyProfileRecordActivity extends AppCompatActivity {
                     ClipData.Item item = clipData.getItemAt(i);
                     Uri uri = item.getUri();
                     uriList.add(uri);
-                }
-                final int takeFlags = data.getFlags() & Intent.FLAG_GRANT_READ_URI_PERMISSION;
-                ContentResolver resolver = this.getContentResolver();
-                for (Uri uri : uriList) {
+                    final int takeFlags = data.getFlags() & Intent.FLAG_GRANT_READ_URI_PERMISSION;
+                    ContentResolver resolver = this.getContentResolver();
                     resolver.takePersistableUriPermission(uri, takeFlags);
                 }
                 try {
