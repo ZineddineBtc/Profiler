@@ -27,7 +27,6 @@
             android:layout_height="wrap_content"
             android:background="@drawable/blue_rounded_borders"
             android:textColor="#ffffff"
-            android:text="SETUP PROFILE"
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
             android:layout_marginTop="20dp"
@@ -74,7 +73,7 @@
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/profilePhotoIV"
                         android:layout_width="150dp"
-                        android:layout_height="150dp"
+                        android:layout_height="145dp"
                         android:layout_gravity="center"
                         android:background="#ffffff"
                         android:src="@drawable/ic_person_circle_grey"
@@ -86,7 +85,7 @@
                         android:layout_height="wrap_content"
                         android:background="#ffffff"
                         android:gravity="center"
-                        android:hint="Name"
+                        android:hint="@string/name"
                         android:textColor="#000000"
                         android:textSize="16sp"
                         android:textStyle="bold"/>
@@ -103,7 +102,7 @@
                 android:id="@+id/profileBioTV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Bio"
+                android:hint="@string/bio"
                 android:textColor="#000000"
                 android:textSize="14sp"
                 android:gravity="center"/>
@@ -126,9 +125,10 @@
                     android:id="@+id/profilePhoneTV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Phone"
+                    android:hint="@string/phone"
                     android:textColor="#000000"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:inputType="phone"/>
             </LinearLayout>
 
             <LinearLayout
@@ -150,7 +150,7 @@
                     android:layout_height="wrap_content"
                     android:clickable="true"
                     android:focusable="false"
-                    android:hint="Birthday"
+                    android:hint="@string/birthday"
                     android:textColor="#000000"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -172,9 +172,9 @@
                     android:id="@+id/profileEmailTV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Email"
+                    android:hint="@string/email"
                     android:textColor="#000000"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"/>
             </LinearLayout>
 
             <LinearLayout
@@ -194,7 +194,7 @@
                     android:id="@+id/profileAddressTV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Address"
+                    android:hint="@string/postal_address"
                     android:textColor="#000000"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -216,7 +216,7 @@
                     android:id="@+id/profileInterestsTV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Interests"
+                    android:hint="@string/interests"
                     android:textColor="#000000"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -237,7 +237,7 @@
                     android:id="@+id/profileRelationshipStatusTV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Relationship Status"
+                    android:hint="@string/relationship_status"
                     android:textColor="#000000"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -258,7 +258,7 @@
                     android:id="@+id/profileOccupationTV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Occupation"
+                    android:hint="@string/occupation"
                     android:textColor="#000000"
                     android:textSize="14sp" />
             </LinearLayout>

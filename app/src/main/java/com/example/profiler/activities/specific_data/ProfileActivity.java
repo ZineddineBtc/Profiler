@@ -3,12 +3,15 @@ package com.example.profiler.activities.specific_data;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -40,7 +43,7 @@ public class ProfileActivity extends AppCompatActivity {
     ProfileDAO profileDAO;
     RecordDAO recordDAO;
     int profileID;
-    boolean noRecords=false;
+    boolean noRecords = false;
     String noRecordsString = "Profile has no records. Click to create one",
             recordString = "Show profile records >";
 
@@ -53,17 +56,59 @@ public class ProfileActivity extends AppCompatActivity {
         recordDAO = new RecordDAO(this);
         findViewsByIds();
         profileID = getIntent().getIntExtra(StaticClass.PROFILE_ID, -1);
-        if(profileID != -1){
+        if (profileID != -1) {
             setProfileUI();
-            if(recordDAO.getProfileRecords(profileID).isEmpty()){
+            if (recordDAO.getProfileRecords(profileID).isEmpty()) {
                 toProfileRecordsTV.setText(noRecordsString);
                 noRecords = true;
-            }else{
+            } else {
                 toProfileRecordsTV.setText(recordString);
                 noRecords = false;
             }
         }
-        setActionBarTitle("Profile of "+profileDAO.getProfile(profileID).getName());
+        setActionBarTitle("Profile");
+        if(!phoneTV.getText().toString().isEmpty()) {
+            phoneTV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String phone_no = phoneTV.getText().toString()
+                            .replaceAll("-", "");
+                    Intent callIntent = new Intent(Intent.ACTION_CALL);
+                    callIntent.setData(Uri.parse("tel:" + phone_no));
+                    if (checkSelfPermission(Manifest.permission.CALL_PHONE)
+                            != PackageManager.PERMISSION_GRANTED) {
+                        return;
+                    }
+                    startActivity(callIntent);
+                }
+            });
+        }
+        if(!emailTV.getText().toString().isEmpty()){
+            emailTV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+                    emailIntent.setType("plain/text");
+                    emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL,
+                            new String[] {emailTV.getText().toString()});
+                    emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "");
+                    emailIntent.putExtra(android.content.Intent.EXTRA_TEXT,"");
+                    startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+                }
+            });
+        }
+        if(!addressTV.getText().toString().isEmpty()){
+            addressTV.setMovementMethod(LinkMovementMethod.getInstance());
+            addressTV.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW);
+                    browserIntent.setData(
+                            Uri.parse("https://www.google.com/maps/search/"+
+                                    addressTV.getText().toString()));
+                    startActivity(browserIntent);
+                }
+            });
+        }
     }
 
     public void findViewsByIds(){

@@ -12,7 +12,8 @@
     android:background="@drawable/white_background_border">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:baselineAligned="false">
         <LinearLayout
             android:layout_width="0dp"
             android:layout_weight="0.7"
@@ -29,7 +30,7 @@
                 android:id="@+id/profileNameTV"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="Full Name"
+                android:text="@string/full_name"
                 android:gravity="center"
                 android:textStyle="bold"
                 android:textColor="#000000"
@@ -63,7 +64,7 @@
         android:visibility="gone">
         <TextView
             android:id="@+id/editTV"
-            android:text="EDIT"
+            android:text="@string/edit"
             android:textColor="@color/blue"
             android:textSize="10sp"
             android:layout_width="wrap_content"
@@ -79,7 +80,7 @@
             android:layout_marginStart="10dp"/>
         <TextView
             android:id="@+id/deleteTV"
-            android:text="DELETE"
+            android:text="@string/delete"
             android:textColor="#BB0000"
             android:textSize="10sp"
             android:layout_width="wrap_content"
@@ -88,7 +89,7 @@
     </LinearLayout>
     <TextView
         android:id="@+id/titleTV"
-        android:text="name"
+        android:text="@string/title"
         android:textColor="#000000"
         android:textSize="14sp"
         android:textStyle="bold"
@@ -100,7 +101,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="12sp"
-        android:text="description"
+        android:text="@string/description"
         android:layout_marginTop="5dp"/>
     <ImageView
         android:id="@+id/imageIV"

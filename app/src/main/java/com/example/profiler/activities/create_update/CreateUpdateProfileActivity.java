@@ -58,6 +58,7 @@ public class CreateUpdateProfileActivity extends AppCompatActivity {
         if(profileID != -1) {
             setUpdateUI();
         }
+        nameET.requestFocus();
         setDate = new SetDate(birthdayET, this);
         setActionBarTitle(actionBarTitle);
     }

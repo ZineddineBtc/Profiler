@@ -1,11 +1,14 @@
 package com.example.profiler.activities.all_data;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,6 +81,48 @@ public class MyProfileFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     createUpdateMyProfile(StaticClass.CREATE);
+                }
+            });
+        }
+        if(!phoneTV.getText().toString().isEmpty()) {
+            phoneTV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String phone_no = phoneTV.getText().toString()
+                            .replaceAll("-", "");
+                    Intent callIntent = new Intent(Intent.ACTION_CALL);
+                    callIntent.setData(Uri.parse("tel:" + phone_no));
+                    if (context.checkSelfPermission(Manifest.permission.CALL_PHONE)
+                            != PackageManager.PERMISSION_GRANTED) {
+                        return;
+                    }
+                    startActivity(callIntent);
+                }
+            });
+        }
+        if(!emailTV.getText().toString().isEmpty()){
+            emailTV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+                    emailIntent.setType("plain/text");
+                    emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL,
+                            new String[] {emailTV.getText().toString()});
+                    emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "");
+                    emailIntent.putExtra(android.content.Intent.EXTRA_TEXT,"");
+                    startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+                }
+            });
+        }
+        if(!addressTV.getText().toString().isEmpty()){
+            addressTV.setMovementMethod(LinkMovementMethod.getInstance());
+            addressTV.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW);
+                    browserIntent.setData(
+                            Uri.parse("https://www.google.com/maps/search/"+
+                                    addressTV.getText().toString()));
+                    startActivity(browserIntent);
                 }
             });
         }

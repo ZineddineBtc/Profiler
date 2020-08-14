@@ -41,7 +41,7 @@
                     android:layout_height="wrap_content"
                     android:background="#ffffff"
                     android:gravity="center"
-                    android:hint="Name"
+                    android:hint="@string/name"
                     android:textColor="#000000"
                     android:textSize="16sp"
                     android:textStyle="bold"/>
@@ -57,7 +57,7 @@
                 android:id="@+id/profileBioTV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Bio"
+                android:hint="@string/bio"
                 android:textColor="#000000"
                 android:textSize="14sp"
                 android:gravity="center"/>
@@ -80,7 +80,7 @@
                     android:id="@+id/profilePhoneTV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Phone"
+                    android:hint="@string/phone"
                     android:textColor="#000000"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -102,9 +102,8 @@
                     android:id="@+id/profileBirthdayTV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:clickable="true"
                     android:focusable="false"
-                    android:hint="Birthday"
+                    android:hint="@string/birthday"
                     android:textColor="#000000"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -126,9 +125,10 @@
                     android:id="@+id/profileEmailTV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Email"
+                    android:hint="@string/email"
                     android:textColor="#000000"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:inputType="textEmailSubject"/>
             </LinearLayout>
 
             <LinearLayout
@@ -148,9 +148,9 @@
                     android:id="@+id/profileAddressTV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Address"
+                    android:hint="@string/postal_address"
                     android:textColor="#000000"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"/>
             </LinearLayout>
 
             <LinearLayout
@@ -170,7 +170,7 @@
                     android:id="@+id/profileInterestsTV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Interests"
+                    android:hint="@string/interests"
                     android:textColor="#000000"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -191,7 +191,7 @@
                     android:id="@+id/profileRelationshipStatusTV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Relationship Status"
+                    android:hint="@string/relationship_status"
                     android:textColor="#000000"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -212,7 +212,7 @@
                     android:id="@+id/profileOccupationTV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Occupation"
+                    android:hint="@string/occupation"
                     android:textColor="#000000"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -264,13 +264,13 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Delete Profile"
+            android:text="@string/delete_profile"
             android:textSize="16sp"
             android:textColor="#000000"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Are you sure you want to delete this profile?"
+            android:text="@string/profile_deletion_reassurance"
             android:layout_marginTop="5dp"/>
         <LinearLayout
             android:layout_width="match_parent"
@@ -283,7 +283,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="#ffffff"
-                android:text="Cancel"
+                android:text="@string/cancel"
                 android:elevation="0dp"
                 android:textColor="@color/blue"
                 android:onClick="cancelDeletion"/>
@@ -292,7 +292,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="#ffffff"
-                android:text="DELETE"
+                android:text="@string/delete"
                 android:elevation="0dp"
                 android:textColor="#FF0000"
                 android:onClick="deleteProfile"/>
