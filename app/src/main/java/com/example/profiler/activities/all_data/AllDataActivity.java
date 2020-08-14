@@ -14,9 +14,8 @@ import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
-import com.example.profiler.CommonClass;
+import com.example.profiler.StaticClass;
 import com.example.profiler.R;
 
 import java.util.Objects;
@@ -33,9 +32,9 @@ public class AllDataActivity extends AppCompatActivity {
 
         findViewsByIds();
         initiateFragments();
-        if (Objects.equals(getIntent().getStringExtra(CommonClass.TO), CommonClass.ALL_RECORDS)) {
+        if (Objects.equals(getIntent().getStringExtra(StaticClass.TO), StaticClass.ALL_RECORDS)) {
             setAllRecordsF();
-        }else if(Objects.equals(getIntent().getStringExtra(CommonClass.TO), CommonClass.My_PROFILE)) {
+        }else if(Objects.equals(getIntent().getStringExtra(StaticClass.TO), StaticClass.My_PROFILE)) {
             setMyProfileF();
         }else{
             setAllProfilesF();

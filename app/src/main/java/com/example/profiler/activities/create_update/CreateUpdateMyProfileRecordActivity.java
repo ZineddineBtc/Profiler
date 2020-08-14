@@ -1,11 +1,9 @@
 package com.example.profiler.activities.create_update;
 
-import android.app.Activity;
 import android.content.ClipData;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,7 +24,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.profiler.CommonClass;
+import com.example.profiler.StaticClass;
 import com.example.profiler.R;
 import com.example.profiler.activities.specific_data.MyProfileRecordsActivity;
 import com.example.profiler.adapters.CustomPagerAdapter;
@@ -34,9 +32,7 @@ import com.example.profiler.daos.MyProfileDAO;
 import com.example.profiler.daos.MyProfileRecordDAO;
 import com.example.profiler.models.Record;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -61,9 +57,9 @@ public class CreateUpdateMyProfileRecordActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_update_record);
         myProfileDAO = new MyProfileDAO(this);
         myRecordDAO = new MyProfileRecordDAO(this);
-        profileID = CommonClass.myProfileID;
+        profileID = StaticClass.myProfileID;
         findViewsByIds();
-        recordID = getIntent().getIntExtra(CommonClass.RECORD_ID, -1);
+        recordID = getIntent().getIntExtra(StaticClass.RECORD_ID, -1);
         if(recordID != -1){
             setUpdateUI();
         }
@@ -164,7 +160,7 @@ public class CreateUpdateMyProfileRecordActivity extends AppCompatActivity {
                 public void run() {
                     errorTV.setVisibility(View.GONE);
                 }
-            }, CommonClass.showErrorTV);
+            }, StaticClass.showErrorTV);
         }
     }
 
@@ -178,13 +174,13 @@ public class CreateUpdateMyProfileRecordActivity extends AppCompatActivity {
         intent.setType("image/*");
         startActivityForResult(
                 Intent.createChooser(intent, "Select Images"),
-                CommonClass.PICK_MULTIPLE_IMAGES);
+                StaticClass.PICK_MULTIPLE_IMAGES);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CommonClass.PICK_MULTIPLE_IMAGES && resultCode == RESULT_OK
+        if (requestCode == StaticClass.PICK_MULTIPLE_IMAGES && resultCode == RESULT_OK
                 && data != null) {
             if(data.getClipData() != null){
                 ClipData clipData = data.getClipData();
@@ -249,7 +245,7 @@ public class CreateUpdateMyProfileRecordActivity extends AppCompatActivity {
         CustomPagerAdapter pagerAdapter = new CustomPagerAdapter(getApplicationContext(), pagerImagesList);
         viewPager.setAdapter(pagerAdapter);
         viewPager.setPageMargin(20);
-        CommonClass.addDot(getApplicationContext(), pagerImagesList,
+        StaticClass.addDot(getApplicationContext(), pagerImagesList,
                 0, dot, dotLayout);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -258,7 +254,7 @@ public class CreateUpdateMyProfileRecordActivity extends AppCompatActivity {
             }
             @Override
             public void onPageSelected(int i) {
-                CommonClass.addDot(getApplicationContext(), pagerImagesList,
+                StaticClass.addDot(getApplicationContext(), pagerImagesList,
                         i, dot, dotLayout);
             }
             @Override

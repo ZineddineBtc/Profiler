@@ -16,16 +16,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.profiler.CommonClass;
+import com.example.profiler.StaticClass;
 import com.example.profiler.R;
 import com.example.profiler.activities.all_data.AllDataActivity;
 import com.example.profiler.activities.create_update.CreateUpdateMyProfileRecordActivity;
-import com.example.profiler.activities.create_update.CreateUpdateRecordActivity;
 import com.example.profiler.adapters.MyProfileRecordsAdapter;
 import com.example.profiler.daos.MyProfileDAO;
 import com.example.profiler.daos.MyProfileRecordDAO;
-import com.example.profiler.daos.ProfileDAO;
-import com.example.profiler.daos.RecordDAO;
 import com.example.profiler.models.Record;
 
 import java.util.ArrayList;
@@ -55,7 +52,7 @@ public class MyProfileRecordsActivity extends AppCompatActivity {
 
         myProfileDAO = new MyProfileDAO(this);
         myProfileRecordDAO = new MyProfileRecordDAO(this);
-        profileID = CommonClass.myProfileID;
+        profileID = StaticClass.myProfileID;
         profileRecordsList = myProfileRecordDAO.getProfileRecordsReversed(profileID);
         adapter = new MyProfileRecordsAdapter(this, profileRecordsList);
         profileRecords = findViewById(R.id.profileRecordsRV);
@@ -80,7 +77,7 @@ public class MyProfileRecordsActivity extends AppCompatActivity {
     public void deleteProfileRecords(View view){
         myProfileRecordDAO.deleteProfileRecords(profileID);
         startActivity(new Intent(getApplicationContext(), AllDataActivity.class)
-                .putExtra(CommonClass.TO, CommonClass.My_PROFILE));
+                .putExtra(StaticClass.TO, StaticClass.My_PROFILE));
     }
 
     public void cancelDeletion(View view){
@@ -108,7 +105,7 @@ public class MyProfileRecordsActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         startActivity(new Intent(getApplicationContext(), AllDataActivity.class)
-        .putExtra(CommonClass.TO, CommonClass.My_PROFILE));
+        .putExtra(StaticClass.TO, StaticClass.My_PROFILE));
     }
 
     public void setActionBarTitle(String title){

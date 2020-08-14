@@ -21,7 +21,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.profiler.CommonClass;
+import com.example.profiler.StaticClass;
 import com.example.profiler.R;
 import com.example.profiler.activities.create_update.CreateUpdateRecordActivity;
 import com.example.profiler.activities.specific_data.ProfileActivity;
@@ -206,8 +206,8 @@ public class RecordsAdapter extends RecyclerView.Adapter<RecordsAdapter.ViewHold
                 public void onClick(View v) {
                     itemView.getContext().startActivity(
                             new Intent(itemView.getContext(), CreateUpdateRecordActivity.class)
-                            .putExtra(CommonClass.RECORD_ID, recordList.get(getAdapterPosition()).getId())
-                            .putExtra(CommonClass.FROM, from)
+                            .putExtra(StaticClass.RECORD_ID, recordList.get(getAdapterPosition()).getId())
+                            .putExtra(StaticClass.FROM, from)
                     );
                 }
             });
@@ -239,7 +239,7 @@ public class RecordsAdapter extends RecyclerView.Adapter<RecordsAdapter.ViewHold
                 public void onClick(View v) {
                     itemView.getContext().startActivity(
                             new Intent(itemView.getContext(), ProfileActivity.class)
-                            .putExtra(CommonClass.PROFILE_ID, recordList.get(getAdapterPosition()).getProfileID())
+                            .putExtra(StaticClass.PROFILE_ID, recordList.get(getAdapterPosition()).getProfileID())
                     );
                 }
             });
@@ -248,7 +248,7 @@ public class RecordsAdapter extends RecyclerView.Adapter<RecordsAdapter.ViewHold
                 public void onClick(View v) {
                     itemView.getContext().startActivity(
                             new Intent(itemView.getContext(), ProfileActivity.class)
-                                    .putExtra(CommonClass.PROFILE_ID, recordList.get(getAdapterPosition()).getProfileID())
+                                    .putExtra(StaticClass.PROFILE_ID, recordList.get(getAdapterPosition()).getProfileID())
                     );
                 }
             });

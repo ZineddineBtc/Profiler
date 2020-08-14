@@ -19,7 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.profiler.CommonClass;
+import com.example.profiler.StaticClass;
 import com.example.profiler.R;
 import com.example.profiler.activities.all_data.AllDataActivity;
 import com.example.profiler.activities.create_update.CreateUpdateProfileActivity;
@@ -52,7 +52,7 @@ public class ProfileActivity extends AppCompatActivity {
         profileDAO = new ProfileDAO(this);
         recordDAO = new RecordDAO(this);
         findViewsByIds();
-        profileID = getIntent().getIntExtra(CommonClass.PROFILE_ID, -1);
+        profileID = getIntent().getIntExtra(StaticClass.PROFILE_ID, -1);
         if(profileID != -1){
             setProfileUI();
             if(recordDAO.getProfileRecords(profileID).isEmpty()){
@@ -137,7 +137,7 @@ public class ProfileActivity extends AppCompatActivity {
             case R.id.updateProfile:
                 startActivity(
                         new Intent(getApplicationContext(), CreateUpdateProfileActivity.class)
-                        .putExtra(CommonClass.PROFILE_ID, profileID));
+                        .putExtra(StaticClass.PROFILE_ID, profileID));
                 break;
             case R.id.deleteProfile:
                 showAlert();
@@ -151,11 +151,11 @@ public class ProfileActivity extends AppCompatActivity {
     public void toProfileRecords(View view){
         if(noRecords){ // create one
             startActivity(new Intent(getApplicationContext(), CreateUpdateRecordActivity.class)
-                    .putExtra(CommonClass.PROFILE_ID, profileID)
-                    .putExtra(CommonClass.FROM, CommonClass.PROFILE));
+                    .putExtra(StaticClass.PROFILE_ID, profileID)
+                    .putExtra(StaticClass.FROM, StaticClass.PROFILE));
         }else{ // show records
             startActivity(new Intent(getApplicationContext(), ProfileRecordsActivity.class)
-                    .putExtra(CommonClass.PROFILE_ID, profileID));
+                    .putExtra(StaticClass.PROFILE_ID, profileID));
         }
     }
 

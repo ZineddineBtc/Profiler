@@ -18,7 +18,7 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
-import com.example.profiler.CommonClass;
+import com.example.profiler.StaticClass;
 import com.example.profiler.R;
 import com.example.profiler.activities.create_update.CreateUpdateMyProfileActivity;
 import com.example.profiler.activities.create_update.CreateUpdateMyProfileRecordActivity;
@@ -57,10 +57,10 @@ public class MyProfileFragment extends Fragment {
             createUpdateMyProfileIB.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    createUpdateMyProfile(CommonClass.UPDATE);
+                    createUpdateMyProfile(StaticClass.UPDATE);
                 }
             });
-            if(myRecordDAO.getProfileRecords(CommonClass.myProfileID).isEmpty()){
+            if(myRecordDAO.getProfileRecords(StaticClass.myProfileID).isEmpty()){
                 toMyProfileRecordsTV.setText(noRecordsString);
                 noRecords = true;
             }else{
@@ -77,7 +77,7 @@ public class MyProfileFragment extends Fragment {
             createUpdateMyProfileIB.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    createUpdateMyProfile(CommonClass.CREATE);
+                    createUpdateMyProfile(StaticClass.CREATE);
                 }
             });
         }
@@ -103,7 +103,7 @@ public class MyProfileFragment extends Fragment {
     public void setProfileUI(){
         noMyProfileLL.setVisibility(View.GONE);
         myProfileLL.setVisibility(View.VISIBLE);
-        String photoString = myProfileDAO.getMyProfile(CommonClass.myProfileID).getPhoto();
+        String photoString = myProfileDAO.getMyProfile(StaticClass.myProfileID).getPhoto();
         if(photoString != null){
             Bitmap imageBitmap = null;
             try {
@@ -117,19 +117,19 @@ public class MyProfileFragment extends Fragment {
             }
             photoIV.setImageBitmap(imageBitmap);
         }
-        nameTV.setText(myProfileDAO.getMyProfile(CommonClass.myProfileID).getName());
-        bioTV.setText(myProfileDAO.getMyProfile(CommonClass.myProfileID).getBio());
-        phoneTV.setText(myProfileDAO.getMyProfile(CommonClass.myProfileID).getPhone());
-        birthdayTV.setText(myProfileDAO.getMyProfile(CommonClass.myProfileID).getBirthday());
-        emailTV.setText(myProfileDAO.getMyProfile(CommonClass.myProfileID).getEmail());
-        addressTV.setText(myProfileDAO.getMyProfile(CommonClass.myProfileID).getAddress());
-        interestsTV.setText(myProfileDAO.getMyProfile(CommonClass.myProfileID).getInterests());
-        relationshipStatusTV.setText(myProfileDAO.getMyProfile(CommonClass.myProfileID).getRelationshipStatus());
-        occupationTV.setText(myProfileDAO.getMyProfile(CommonClass.myProfileID).getOccupation());
+        nameTV.setText(myProfileDAO.getMyProfile(StaticClass.myProfileID).getName());
+        bioTV.setText(myProfileDAO.getMyProfile(StaticClass.myProfileID).getBio());
+        phoneTV.setText(myProfileDAO.getMyProfile(StaticClass.myProfileID).getPhone());
+        birthdayTV.setText(myProfileDAO.getMyProfile(StaticClass.myProfileID).getBirthday());
+        emailTV.setText(myProfileDAO.getMyProfile(StaticClass.myProfileID).getEmail());
+        addressTV.setText(myProfileDAO.getMyProfile(StaticClass.myProfileID).getAddress());
+        interestsTV.setText(myProfileDAO.getMyProfile(StaticClass.myProfileID).getInterests());
+        relationshipStatusTV.setText(myProfileDAO.getMyProfile(StaticClass.myProfileID).getRelationshipStatus());
+        occupationTV.setText(myProfileDAO.getMyProfile(StaticClass.myProfileID).getOccupation());
     }
     public void createUpdateMyProfile(String action){
         startActivity(new Intent(context, CreateUpdateMyProfileActivity.class)
-        .putExtra(CommonClass.ACTION, action));
+        .putExtra(StaticClass.ACTION, action));
     }
     public void toMyProfileRecords(){
         if(noRecords){ // create one

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,16 +23,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.profiler.CommonClass;
+import com.example.profiler.StaticClass;
 import com.example.profiler.R;
 import com.example.profiler.activities.all_data.AllDataActivity;
 import com.example.profiler.adapters.SetDate;
 import com.example.profiler.daos.MyProfileDAO;
 import com.example.profiler.models.Profile;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Objects;
 
 public class CreateUpdateMyProfileActivity extends AppCompatActivity {
@@ -53,7 +50,7 @@ public class CreateUpdateMyProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_update_profile);
         myProfileDAO = new MyProfileDAO(getApplicationContext());
         findViewsByIds();
-        if(Objects.equals(getIntent().getStringExtra(CommonClass.ACTION), CommonClass.UPDATE)){
+        if(Objects.equals(getIntent().getStringExtra(StaticClass.ACTION), StaticClass.UPDATE)){
             setUpdateUI();
         }else{
             actionBarTitle = "Create My Profile";
@@ -77,7 +74,7 @@ public class CreateUpdateMyProfileActivity extends AppCompatActivity {
     }
 
     public void setUpdateUI(){
-        photoString = myProfileDAO.getMyProfile(CommonClass.myProfileID).getPhoto();
+        photoString = myProfileDAO.getMyProfile(StaticClass.myProfileID).getPhoto();
         if(photoString != null){
             Bitmap imageBitmap = null;
             try {
@@ -89,15 +86,15 @@ public class CreateUpdateMyProfileActivity extends AppCompatActivity {
             }
             photoIV.setImageBitmap(imageBitmap);
         }
-        nameET.setText(myProfileDAO.getMyProfile(CommonClass.myProfileID).getName());
-        bioET.setText(myProfileDAO.getMyProfile(CommonClass.myProfileID).getBio());
-        phoneET.setText(myProfileDAO.getMyProfile(CommonClass.myProfileID).getPhone());
-        birthdayET.setText(myProfileDAO.getMyProfile(CommonClass.myProfileID).getBirthday());
-        emailET.setText(myProfileDAO.getMyProfile(CommonClass.myProfileID).getEmail());
-        addressET.setText(myProfileDAO.getMyProfile(CommonClass.myProfileID).getAddress());
-        interestsET.setText(myProfileDAO.getMyProfile(CommonClass.myProfileID).getInterests());
-        relationshipStatusET.setText(myProfileDAO.getMyProfile(CommonClass.myProfileID).getRelationshipStatus());
-        occupationET.setText(myProfileDAO.getMyProfile(CommonClass.myProfileID).getOccupation());
+        nameET.setText(myProfileDAO.getMyProfile(StaticClass.myProfileID).getName());
+        bioET.setText(myProfileDAO.getMyProfile(StaticClass.myProfileID).getBio());
+        phoneET.setText(myProfileDAO.getMyProfile(StaticClass.myProfileID).getPhone());
+        birthdayET.setText(myProfileDAO.getMyProfile(StaticClass.myProfileID).getBirthday());
+        emailET.setText(myProfileDAO.getMyProfile(StaticClass.myProfileID).getEmail());
+        addressET.setText(myProfileDAO.getMyProfile(StaticClass.myProfileID).getAddress());
+        interestsET.setText(myProfileDAO.getMyProfile(StaticClass.myProfileID).getInterests());
+        relationshipStatusET.setText(myProfileDAO.getMyProfile(StaticClass.myProfileID).getRelationshipStatus());
+        occupationET.setText(myProfileDAO.getMyProfile(StaticClass.myProfileID).getOccupation());
         actionBarTitle = "Edit My Profile";
     }
 
@@ -115,13 +112,13 @@ public class CreateUpdateMyProfileActivity extends AppCompatActivity {
                     relationshipStatusET.getText().toString(),
                     occupationET.getText().toString()
             );
-            if(Objects.equals(getIntent().getStringExtra(CommonClass.ACTION), CommonClass.UPDATE)){
-                myProfileDAO.updateProfile(CommonClass.myProfileID, profile);
+            if(Objects.equals(getIntent().getStringExtra(StaticClass.ACTION), StaticClass.UPDATE)){
+                myProfileDAO.updateProfile(StaticClass.myProfileID, profile);
             }else{
                 myProfileDAO.insertProfile(profile);
             }
             startActivity(new Intent(getApplicationContext(), AllDataActivity.class)
-                    .putExtra(CommonClass.TO, CommonClass.My_PROFILE));
+                    .putExtra(StaticClass.TO, StaticClass.My_PROFILE));
         }else{
             errorTV.setText(R.string.empty_name);
             errorTV.setVisibility(View.VISIBLE);
@@ -131,7 +128,7 @@ public class CreateUpdateMyProfileActivity extends AppCompatActivity {
                 public void run() {
                     errorTV.setVisibility(View.GONE);
                 }
-            }, CommonClass.showErrorTV);
+            }, StaticClass.showErrorTV);
         }
     }
 
@@ -159,12 +156,12 @@ public class CreateUpdateMyProfileActivity extends AppCompatActivity {
         intent.setType("image/*");
         startActivityForResult(
                 Intent.createChooser(intent, "Select Images"),
-                CommonClass.PICK_SINGLE_IMAGE);
+                StaticClass.PICK_SINGLE_IMAGE);
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CommonClass.PICK_SINGLE_IMAGE && resultCode == Activity.RESULT_OK) {
+        if (requestCode == StaticClass.PICK_SINGLE_IMAGE && resultCode == Activity.RESULT_OK) {
             if (data == null) {
                 Toast.makeText(getApplicationContext(), "ERROR", Toast.LENGTH_SHORT).show();
                 return;

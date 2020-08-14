@@ -8,7 +8,6 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,16 +23,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.profiler.CommonClass;
+import com.example.profiler.StaticClass;
 import com.example.profiler.R;
 import com.example.profiler.activities.all_data.AllDataActivity;
 import com.example.profiler.adapters.SetDate;
 import com.example.profiler.daos.ProfileDAO;
 import com.example.profiler.models.Profile;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Objects;
 
 public class CreateUpdateProfileActivity extends AppCompatActivity {
@@ -46,6 +43,7 @@ public class CreateUpdateProfileActivity extends AppCompatActivity {
     ProfileDAO profileDAO;
     String actionBarTitle = "New Profile";
     String photoString = null;
+    SetDate setDate;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -56,11 +54,11 @@ public class CreateUpdateProfileActivity extends AppCompatActivity {
         profileDAO = new ProfileDAO(getApplicationContext());
 
         findViewsByIds();
-        profileID = getIntent().getIntExtra(CommonClass.PROFILE_ID, -1);
+        profileID = getIntent().getIntExtra(StaticClass.PROFILE_ID, -1);
         if(profileID != -1) {
             setUpdateUI();
         }
-        new SetDate(birthdayET, this);
+        setDate = new SetDate(birthdayET, this);
         setActionBarTitle(actionBarTitle);
     }
 
@@ -103,9 +101,11 @@ public class CreateUpdateProfileActivity extends AppCompatActivity {
         actionBarTitle = "Edit";
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void saveProfile(){
+        Profile profile;
         if(!nameET.getText().toString().isEmpty()){
-            Profile profile = new Profile(
+            profile = new Profile(
                     photoString,
                     nameET.getText().toString(),
                     bioET.getText().toString(),
@@ -122,6 +122,10 @@ public class CreateUpdateProfileActivity extends AppCompatActivity {
             }else{
                 profileDAO.insertProfile(profile);
             }
+            StaticClass.createReminder(
+                    getApplicationContext(),
+                    StaticClass.getNotification(getApplicationContext(), profile.getName()),
+                    setDate.getCalendar());
             startActivity(new Intent(getApplicationContext(), AllDataActivity.class));
         }else{
             errorTV.setText(R.string.empty_name);
@@ -132,7 +136,7 @@ public class CreateUpdateProfileActivity extends AppCompatActivity {
                 public void run() {
                     errorTV.setVisibility(View.GONE);
                 }
-            }, CommonClass.showErrorTV);
+            }, StaticClass.showErrorTV);
         }
     }
 
@@ -143,6 +147,7 @@ public class CreateUpdateProfileActivity extends AppCompatActivity {
         return true;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId() == R.id.save){
@@ -160,13 +165,13 @@ public class CreateUpdateProfileActivity extends AppCompatActivity {
         intent.setType("image/*");
         startActivityForResult(
                 Intent.createChooser(intent, "Select Images"),
-                CommonClass.PICK_SINGLE_IMAGE);
+                StaticClass.PICK_SINGLE_IMAGE);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CommonClass.PICK_SINGLE_IMAGE && resultCode == Activity.RESULT_OK) {
+        if (requestCode == StaticClass.PICK_SINGLE_IMAGE && resultCode == Activity.RESULT_OK) {
             if (data == null) {
                 Toast.makeText(getApplicationContext(), "ERROR", Toast.LENGTH_SHORT).show();
                 return;

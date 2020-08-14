@@ -7,6 +7,8 @@
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:allowBackup="true"
@@ -16,6 +18,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:exported="true">
+        <receiver android:name=".adapters.NotificationPublisher"
+            android:enabled="true">
+        </receiver>
         <activity android:name=".activities.create_update.SelectProfileActivity"
             />
         <activity android:name=".activities.specific_data.ProfileRecordsActivity"

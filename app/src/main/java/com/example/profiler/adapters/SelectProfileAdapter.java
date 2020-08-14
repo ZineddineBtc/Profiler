@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.profiler.CommonClass;
+import com.example.profiler.StaticClass;
 import com.example.profiler.R;
 import com.example.profiler.activities.create_update.CreateUpdateRecordActivity;
 import com.example.profiler.models.Profile;
@@ -86,8 +86,8 @@ public class SelectProfileAdapter extends RecyclerView.Adapter<SelectProfileAdap
 
             itemView.getContext().startActivity(
                     new Intent(itemView.getContext(), CreateUpdateRecordActivity.class)
-                    .putExtra(CommonClass.FROM, CommonClass.SELECT_PROFILE)
-                    .putExtra(CommonClass.PROFILE_ID, profileList.get(getAdapterPosition()).getId())
+                    .putExtra(StaticClass.FROM, StaticClass.SELECT_PROFILE)
+                    .putExtra(StaticClass.PROFILE_ID, profileList.get(getAdapterPosition()).getId())
             );
         }
     }

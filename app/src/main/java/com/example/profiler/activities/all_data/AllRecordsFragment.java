@@ -18,7 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.profiler.CommonClass;
+import com.example.profiler.StaticClass;
 import com.example.profiler.R;
 import com.example.profiler.activities.create_update.SelectProfileActivity;
 import com.example.profiler.adapters.RecordsAdapter;
@@ -47,7 +47,7 @@ public class AllRecordsFragment extends Fragment implements SearchView.OnQueryTe
         context = Objects.requireNonNull(getContext());
         recordDAO = new RecordDAO(context);
         allRecordsList = recordDAO.getAllRecordsReversed();
-        adapter = new RecordsAdapter(context, allRecordsList, CommonClass.ALL_RECORDS);
+        adapter = new RecordsAdapter(context, allRecordsList, StaticClass.ALL_RECORDS);
         LL = fragmentView.findViewById(R.id.LL);
         if(allRecordsList.isEmpty()){
             emptyListTV = fragmentView.findViewById(R.id.emptyRecordsListTV);

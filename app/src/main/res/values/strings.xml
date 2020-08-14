@@ -12,4 +12,5 @@
     <string name="empty_name">Name must not be empty</string>
     <string name="empty_title">Title must not be empty</string>
     <string name="my_profile">My Profile</string>
+    <string name="birthday">Birthday Reminder</string>
 </resources>

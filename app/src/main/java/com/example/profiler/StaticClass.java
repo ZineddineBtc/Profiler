@@ -1,22 +1,29 @@
 package com.example.profiler;
 
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.Context;
-import android.content.pm.PackageManager;
+import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
+import android.icu.util.Calendar;
+import android.os.Build;
+import android.os.SystemClock;
 import android.text.Html;
-import android.util.Base64;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.core.app.ActivityCompat;
+import androidx.annotation.RequiresApi;
+import androidx.core.app.NotificationCompat;
 
-import java.io.ByteArrayOutputStream;
+import com.example.profiler.activities.all_data.AllDataActivity;
+import com.example.profiler.activities.specific_data.ProfileActivity;
+import com.example.profiler.adapters.NotificationPublisher;
+import com.example.profiler.models.Profile;
+
 import java.util.ArrayList;
 
-public class CommonClass {
+public class StaticClass {
 
     public static int PICK_SINGLE_IMAGE = 1;
     public static int PICK_MULTIPLE_IMAGES = 2;
@@ -89,5 +96,54 @@ public class CommonClass {
             dotLayout.addView(dot[i]);
         }
         dot[pagePosition].setTextColor(context.getColor(R.color.blue));
+    }
+    /*public void setAlarm(Context context, int id){
+
+        BroadcastReceiver receiver = new BroadcastReceiver() {
+            @Override public void onReceive(Context context, Intent intent){
+                button.setBackgroundColor(Color.RED);
+                context.unregisterReceiver(this); // this = BroadcastReceiver, not Activity
+            }
+        };
+
+        context.registerReceiver( receiver, new IntentFilter("com.blah.blah.somemessage") );
+        PendingIntent pendingIntent = PendingIntent.getBroadcast( context
+                , 0, new Intent("com.blah.blah.somemessage"), 0 );
+        AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Objects.requireNonNull(manager)
+                .set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                        SystemClock.elapsedRealtime() + 1000*5, pendingIntent);
+    }*/
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public static void createReminder(Context context, Notification notification,
+                                Calendar alarmCalendar) {
+        Intent notificationIntent = new Intent(context, NotificationPublisher.class);
+        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, 1);
+        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        long delay = alarmCalendar.getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
+        long futureInMillis = SystemClock.elapsedRealtime() + delay;
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        assert alarmManager != null;
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
+    }
+
+    public static Notification getNotification(Context context, String profileName) {
+        String channelId = "Reminders";
+        PendingIntent newEntryActivityPendingIntent = PendingIntent.getActivity(
+                context, 1, new Intent(context, AllDataActivity.class),
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        String message = "It's "+profileName+"'s birthday!";
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(
+                context, channelId)
+                .setContentTitle(context.getString(R.string.birthday))
+                .setContentText(message)
+                .setTicker(context.getString(R.string.app_name))
+                .setSmallIcon(R.drawable.ic_cake_white)
+                .setDefaults(Notification.DEFAULT_SOUND)
+                .setAutoCancel(true)
+                .setContentIntent(newEntryActivityPendingIntent);
+        return builder.build();
     }
 }

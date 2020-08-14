@@ -17,14 +17,14 @@ import java.util.Locale;
 public class SetDate implements View.OnClickListener, DatePickerDialog.OnDateSetListener {
 
     private EditText editText;
-    private Calendar myCalendar;
+    private Calendar calendar;
     private Context context;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public SetDate(EditText editText, Context context){
         this.editText = editText;
         this.editText.setOnClickListener(this);
-        myCalendar = Calendar.getInstance();
+        calendar = Calendar.getInstance();
         this.context = context;
     }
 
@@ -34,19 +34,23 @@ public class SetDate implements View.OnClickListener, DatePickerDialog.OnDateSet
         // this.editText.setText();
 
         String myFormat = "MMM dd, yyyy"; //In which you need put here
-        SimpleDateFormat sdformat = new SimpleDateFormat(myFormat, Locale.US);
-        myCalendar.set(Calendar.YEAR, year);
-        myCalendar.set(Calendar.MONTH, monthOfYear);
-        myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(myFormat, Locale.US);
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, monthOfYear);
+        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-        editText.setText(sdformat.format(myCalendar.getTime()));
+        editText.setText(simpleDateFormat.format(calendar.getTime()));
 
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onClick(View v) {
-        new DatePickerDialog(context, this, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+        new DatePickerDialog(context, this, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)).show();
+    }
+
+    public Calendar getCalendar() {
+        return calendar;
     }
 }

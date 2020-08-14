@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.profiler.CommonClass;
+import com.example.profiler.StaticClass;
 import com.example.profiler.R;
 import com.example.profiler.activities.specific_data.ProfileActivity;
 import com.example.profiler.models.Profile;
@@ -83,7 +83,7 @@ public class ProfilesAdapter extends RecyclerView.Adapter<ProfilesAdapter.ViewHo
                 mClickListener.onItemClick(view, getAdapterPosition());
             itemView.getContext().startActivity(
                     new Intent(itemView.getContext(), ProfileActivity.class)
-                    .putExtra(CommonClass.PROFILE_ID,
+                    .putExtra(StaticClass.PROFILE_ID,
                             profileList.get(getAdapterPosition()).getId())
             );
         }

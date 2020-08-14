@@ -21,7 +21,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.profiler.CommonClass;
+import com.example.profiler.StaticClass;
 import com.example.profiler.R;
 import com.example.profiler.activities.all_data.AllDataActivity;
 import com.example.profiler.activities.create_update.CreateUpdateMyProfileRecordActivity;
@@ -83,12 +83,12 @@ public class MyProfileRecordsAdapter extends RecyclerView.Adapter<MyProfileRecor
                 holder.viewPager.setAdapter(holder.pagerAdapter);
                 holder.viewPager.setPageMargin(20);
                 //holder.addDot(0);
-                CommonClass.addDot(context, holder.pagerImagesList,
+                StaticClass.addDot(context, holder.pagerImagesList,
                         0, holder.dot, holder.dotLayout);
                 holder.viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                     @Override
                     public void onPageSelected(int i) {
-                        CommonClass.addDot(context, holder.pagerImagesList,
+                        StaticClass.addDot(context, holder.pagerImagesList,
                                 i, holder.dot, holder.dotLayout);
                     }
                     @Override
@@ -118,10 +118,10 @@ public class MyProfileRecordsAdapter extends RecyclerView.Adapter<MyProfileRecor
         holder.timeTV.setText(recordList.get(position).getTime());
 
         holder.profileNameTV.setText(
-                holder.myProfileDAO.getMyProfile(CommonClass.myProfileID).getName()
+                holder.myProfileDAO.getMyProfile(StaticClass.myProfileID).getName()
         );
         String photoString = holder.myProfileDAO
-                .getMyProfile(CommonClass.myProfileID).getPhoto();
+                .getMyProfile(StaticClass.myProfileID).getPhoto();
         if(photoString != null) {
             Bitmap imageBitmap = null;
             try {
@@ -207,7 +207,7 @@ public class MyProfileRecordsAdapter extends RecyclerView.Adapter<MyProfileRecor
                 public void onClick(View v) {
                     itemView.getContext().startActivity(
                             new Intent(itemView.getContext(), CreateUpdateMyProfileRecordActivity.class)
-                            .putExtra(CommonClass.RECORD_ID, recordList.get(getAdapterPosition()).getId())
+                            .putExtra(StaticClass.RECORD_ID, recordList.get(getAdapterPosition()).getId())
                     );
                 }
             });
@@ -239,7 +239,7 @@ public class MyProfileRecordsAdapter extends RecyclerView.Adapter<MyProfileRecor
                 public void onClick(View v) {
                     itemView.getContext().startActivity(
                             new Intent(itemView.getContext(), AllDataActivity.class)
-                            .putExtra(CommonClass.TO, CommonClass.My_PROFILE)
+                            .putExtra(StaticClass.TO, StaticClass.My_PROFILE)
                     );
                 }
             });
@@ -248,7 +248,7 @@ public class MyProfileRecordsAdapter extends RecyclerView.Adapter<MyProfileRecor
                 public void onClick(View v) {
                     itemView.getContext().startActivity(
                             new Intent(itemView.getContext(), AllDataActivity.class)
-                                    .putExtra(CommonClass.TO, CommonClass.My_PROFILE)
+                                    .putExtra(StaticClass.TO, StaticClass.My_PROFILE)
                     );
                 }
             });

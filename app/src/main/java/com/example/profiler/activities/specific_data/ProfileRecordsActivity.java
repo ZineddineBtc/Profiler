@@ -16,9 +16,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
-import com.example.profiler.CommonClass;
+import com.example.profiler.StaticClass;
 import com.example.profiler.R;
-import com.example.profiler.activities.all_data.AllDataActivity;
 import com.example.profiler.activities.create_update.CreateUpdateRecordActivity;
 import com.example.profiler.adapters.RecordsAdapter;
 import com.example.profiler.daos.ProfileDAO;
@@ -52,9 +51,9 @@ public class ProfileRecordsActivity extends AppCompatActivity {
 
         profileDAO = new ProfileDAO(this);
         recordDAO = new RecordDAO(this);
-        profileID = getIntent().getIntExtra(CommonClass.PROFILE_ID, -1);
+        profileID = getIntent().getIntExtra(StaticClass.PROFILE_ID, -1);
         profileRecordsList = recordDAO.getProfileRecordsReversed(profileID);
-        adapter = new RecordsAdapter(this, profileRecordsList, CommonClass.PROFILE_RECORDS);
+        adapter = new RecordsAdapter(this, profileRecordsList, StaticClass.PROFILE_RECORDS);
         profileRecords = findViewById(R.id.profileRecordsRV);
         profileRecords.setLayoutManager(new LinearLayoutManager(this,
                 LinearLayoutManager.VERTICAL, false));
@@ -77,7 +76,7 @@ public class ProfileRecordsActivity extends AppCompatActivity {
     public void deleteProfileRecords(View view){
         recordDAO.deleteProfileRecords(profileID);
         startActivity(new Intent(getApplicationContext(), ProfileActivity.class)
-                .putExtra(CommonClass.PROFILE_ID, profileID));
+                .putExtra(StaticClass.PROFILE_ID, profileID));
     }
 
     public void cancelDeletion(View view){
@@ -91,8 +90,8 @@ public class ProfileRecordsActivity extends AppCompatActivity {
             case R.id.createRecord:
                 startActivity(
                         new Intent(getApplicationContext(), CreateUpdateRecordActivity.class)
-                                .putExtra(CommonClass.PROFILE_ID, profileID)
-                                .putExtra(CommonClass.FROM, CommonClass.PROFILE_RECORDS)
+                                .putExtra(StaticClass.PROFILE_ID, profileID)
+                                .putExtra(StaticClass.FROM, StaticClass.PROFILE_RECORDS)
                 );
                 break;
             case R.id.deleteProfileRecords:
@@ -107,7 +106,7 @@ public class ProfileRecordsActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         startActivity(new Intent(getApplicationContext(), ProfileActivity.class)
-        .putExtra(CommonClass.PROFILE_ID, profileID));
+        .putExtra(StaticClass.PROFILE_ID, profileID));
     }
 
     public void setActionBarTitle(String title){
