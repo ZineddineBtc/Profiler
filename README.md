@@ -1,6 +1,5 @@
 # Profiler
 
-## Project Description
 This is an app that allows the user to create profiles and create records for every profile.<br/>
 The app uses SQLite databases to store the profiles and their records (2 tables One-To-Many).<br/>
 
