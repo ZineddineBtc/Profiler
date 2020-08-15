@@ -29,7 +29,7 @@ import java.util.Objects;
 
 public class ProfileRecordsActivity extends AppCompatActivity {
 
-    RecyclerView profileRecords;
+    RecyclerView profileRecordsRV;
     RecordsAdapter adapter;
     ArrayList<Record> profileRecordsList;
     LinearLayout shadeLL, alertLL;
@@ -54,10 +54,12 @@ public class ProfileRecordsActivity extends AppCompatActivity {
         profileID = getIntent().getIntExtra(StaticClass.PROFILE_ID, -1);
         profileRecordsList = recordDAO.getProfileRecordsReversed(profileID);
         adapter = new RecordsAdapter(this, profileRecordsList, StaticClass.PROFILE_RECORDS);
-        profileRecords = findViewById(R.id.profileRecordsRV);
-        profileRecords.setLayoutManager(new LinearLayoutManager(this,
+        profileRecordsRV = findViewById(R.id.profileRecordsRV);
+        profileRecordsRV.setLayoutManager(new LinearLayoutManager(this,
                 LinearLayoutManager.VERTICAL, false));
-        profileRecords.setAdapter(adapter);
+        profileRecordsRV.setAdapter(adapter);
+        profileRecordsRV.setDrawingCacheEnabled(true);
+        profileRecordsRV.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
 
         setActionBarTitle("Records of "+profileDAO.getProfile(profileID).getName());
     }

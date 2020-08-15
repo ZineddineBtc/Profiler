@@ -17,6 +17,7 @@ public class CustomPagerAdapter extends PagerAdapter {
 
     Context context;
     ArrayList<Bitmap> pager;
+    ImageView imageView;
 
     public CustomPagerAdapter(Context context, ArrayList<Bitmap> pager) {
         this.context = context;
@@ -36,7 +37,7 @@ public class CustomPagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         View view = LayoutInflater.from(context).inflate(R.layout.pager_item, container, false);
-        ImageView imageView = view.findViewById(R.id.image);
+        imageView = view.findViewById(R.id.image);
         imageView.setImageBitmap(pager.get(position));
         container.addView(view);
 

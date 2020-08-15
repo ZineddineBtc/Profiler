@@ -73,6 +73,8 @@ public class AllRecordsFragment extends Fragment implements SearchView.OnQueryTe
         allRecordsRV.setLayoutManager(new LinearLayoutManager(context,
                 LinearLayoutManager.VERTICAL, false));
         allRecordsRV.setAdapter(adapter);
+        allRecordsRV.setDrawingCacheEnabled(true);
+        allRecordsRV.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
     }
 
     @Override

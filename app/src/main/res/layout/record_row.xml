@@ -111,7 +111,7 @@
         android:layout_marginTop="5dp"
         android:adjustViewBounds="true"
         android:scaleType="fitCenter"/>
-    <androidx.viewpager.widget.ViewPager
+    <com.example.profiler.adapters.ClickableViewPager
         android:id="@+id/viewPagerAdapter"
         android:layout_width="match_parent"
         android:layout_height="200dp"

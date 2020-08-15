@@ -6,39 +6,51 @@
     <dist:module dist:instant="true" />
 
     <uses-permission android:name="android.permission.CALL_PHONE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
+        android:exported="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:exported="true">
-        <receiver android:name=".adapters.NotificationPublisher"
-            android:enabled="true">
-        </receiver>
-        <activity android:name=".activities.create_update.SelectProfileActivity"
-            />
-        <activity android:name=".activities.specific_data.ProfileRecordsActivity"
-            android:exported="true"/>
-        <activity android:name=".activities.specific_data.MyProfileRecordsActivity"
-            android:exported="true"/>
-        <activity android:name=".activities.specific_data.ProfileActivity"
-            android:exported="true"/>
-        <activity android:name=".activities.create_update.CreateUpdateRecordActivity"
-            android:exported="true"/>
-        <activity android:name=".activities.create_update.CreateUpdateMyProfileRecordActivity"
-            android:exported="true"/>
-        <activity android:name=".activities.create_update.CreateUpdateProfileActivity"
-            android:exported="true"/>
-        <activity android:name=".activities.create_update.CreateUpdateMyProfileActivity"
-            android:exported="true"/>
-        <activity android:name=".activities.all_data.AllDataActivity"
+        android:theme="@style/AppTheme">
+        <activity android:name=".activities.FullScreenActivity"
+            android:theme="@android:style/Theme.NoTitleBar"/>
+
+        <receiver
+            android:name=".adapters.NotificationPublisher"
+            android:enabled="true"></receiver>
+
+        <activity android:name=".activities.create_update.SelectProfileActivity" />
+        <activity
+            android:name=".activities.specific_data.ProfileRecordsActivity"
+            android:exported="true" />
+        <activity
+            android:name=".activities.specific_data.MyProfileRecordsActivity"
+            android:exported="true" />
+        <activity
+            android:name=".activities.specific_data.ProfileActivity"
+            android:exported="true" />
+        <activity
+            android:name=".activities.create_update.CreateUpdateRecordActivity"
+            android:exported="true" />
+        <activity
+            android:name=".activities.create_update.CreateUpdateMyProfileRecordActivity"
+            android:exported="true" />
+        <activity
+            android:name=".activities.create_update.CreateUpdateProfileActivity"
+            android:exported="true" />
+        <activity
+            android:name=".activities.create_update.CreateUpdateMyProfileActivity"
+            android:exported="true" />
+        <activity
+            android:name=".activities.all_data.AllDataActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

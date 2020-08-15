@@ -61,6 +61,8 @@ public class AllProfilesFragment extends Fragment implements SearchView.OnQueryT
             }
         });
 
+
+
         return fragmentView;
     }
 

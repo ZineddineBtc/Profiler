@@ -57,14 +57,14 @@ public class RecordsAdapter extends RecyclerView.Adapter<RecordsAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.titleTV.setText(recordList.get(position).getTitle());
         if(!recordList.get(position).getDescription().isEmpty()){
             holder.descriptionTV.setText(recordList.get(position).getDescription());
         }else{
             holder.descriptionTV.setVisibility(View.GONE);
         }
-        String imageString = recordList.get(position).getImage();
+        final String imageString = recordList.get(position).getImage();
         if(imageString != null) {
             if(imageString.contains(",")){ // viewPager
                 String[] multipleImagesString = imageString.split(",");
@@ -95,6 +95,17 @@ public class RecordsAdapter extends RecyclerView.Adapter<RecordsAdapter.ViewHold
                     @Override
                     public void onPageScrollStateChanged(int i) {}
                 });
+                holder.viewPager.setOnViewPagerClickListener(new ClickableViewPager.OnClickListener() {
+                    @Override
+                    public void onViewPagerClick(ViewPager viewPager) {
+                        StaticClass.viewFullScreen(context,
+                                holder.titleTV.getText().toString(),
+                                holder.descriptionTV.getText().toString(),
+                                imageString,
+                                StaticClass.VIEW_PAGER, from,
+                                recordList.get(position).getProfileID());
+                    }
+                });
             }else{ // a single image
                 holder.viewPager.setVisibility(View.GONE);
                 holder.dotLayout.setVisibility(View.GONE);
@@ -108,6 +119,17 @@ public class RecordsAdapter extends RecyclerView.Adapter<RecordsAdapter.ViewHold
                             Toast.LENGTH_LONG).show();
                 }
                 holder.imageIV.setImageBitmap(imageBitmap);
+                holder.imageIV.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        StaticClass.viewFullScreen(context,
+                                holder.titleTV.getText().toString(),
+                                holder.descriptionTV.getText().toString(),
+                                imageString,
+                                StaticClass.IMAGE_VIEW, from,
+                                recordList.get(position).getProfileID());
+                    }
+                });
             }
         }else{ // no image
             holder.viewPager.setVisibility(View.GONE);
@@ -151,7 +173,7 @@ public class RecordsAdapter extends RecyclerView.Adapter<RecordsAdapter.ViewHold
         ProfileDAO profileDAO;
         RecordDAO recordDAO;
 
-        ViewPager viewPager;
+        ClickableViewPager viewPager;
         CustomPagerAdapter pagerAdapter;
         ArrayList<Bitmap> pagerImagesList;
         LinearLayout dotLayout;

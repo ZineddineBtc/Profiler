@@ -16,11 +16,12 @@ import android.widget.TextView;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
+import com.example.profiler.activities.FullScreenActivity;
 import com.example.profiler.activities.all_data.AllDataActivity;
-import com.example.profiler.activities.specific_data.ProfileActivity;
 import com.example.profiler.adapters.NotificationPublisher;
-import com.example.profiler.models.Profile;
+import com.example.profiler.models.Record;
 
+import java.net.URI;
 import java.util.ArrayList;
 
 public class StaticClass {
@@ -37,10 +38,18 @@ public class StaticClass {
     public static String PROFILE_RECORDS = "profile records";
     public static String PROFILE = "profile";
     public static String My_PROFILE = "my profile";
+    public static String My_PROFILE_RECORDS = "my profile records";
     public static String ACTION = "action";
     public static String CREATE = "create";
     public static String UPDATE = "update";
+    public static String URI_STRING = "uri";
+    public static String VIEW_TYPE = "view type";
+    public static String VIEW_PAGER = "view pager";
+    public static String IMAGE_VIEW = "image view";
+    public static String TITLE = "title";
+    public static String DESCRIPTION = "description";
     public static long showErrorTV = 1500; // 1s
+
     /*public static Bitmap stringToBitmap(String b64) {
         if(b64==null){
             return null;
@@ -146,4 +155,18 @@ public class StaticClass {
                 .setContentIntent(newEntryActivityPendingIntent);
         return builder.build();
     }
+
+    public static void viewFullScreen(Context context,
+                                      String title, String description, String uriString,
+                                      String viewType, String from, int profileId){
+        context.startActivity(new Intent(context, FullScreenActivity.class)
+                .putExtra(TITLE, title)
+                .putExtra(DESCRIPTION, description)
+                .putExtra(URI_STRING, uriString)
+                .putExtra(VIEW_TYPE, viewType)
+                .putExtra(FROM, from)
+                .putExtra(PROFILE_ID, profileId));
+
+    }
+
 }

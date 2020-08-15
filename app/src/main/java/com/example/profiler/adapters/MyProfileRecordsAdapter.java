@@ -62,7 +62,7 @@ public class MyProfileRecordsAdapter extends RecyclerView.Adapter<MyProfileRecor
         }else{
             holder.descriptionTV.setVisibility(View.GONE);
         }
-        String imageString = recordList.get(position).getImage();
+        final String imageString = recordList.get(position).getImage();
         if(imageString != null) {
             if(imageString.contains(",")){ // viewPager
                 String[] multipleImagesString = imageString.split(",");
@@ -96,6 +96,17 @@ public class MyProfileRecordsAdapter extends RecyclerView.Adapter<MyProfileRecor
                     @Override
                     public void onPageScrollStateChanged(int i) {}
                 });
+                holder.viewPager.setOnViewPagerClickListener(new ClickableViewPager.OnClickListener() {
+                    @Override
+                    public void onViewPagerClick(ViewPager viewPager) {
+                        StaticClass.viewFullScreen(context,
+                                holder.titleTV.getText().toString(),
+                                holder.descriptionTV.getText().toString(),
+                                imageString,
+                                StaticClass.VIEW_PAGER, StaticClass.My_PROFILE_RECORDS,
+                                StaticClass.myProfileID);
+                    }
+                });
             }else{ // a single image
                 holder.viewPager.setVisibility(View.GONE);
                 holder.dotLayout.setVisibility(View.GONE);
@@ -109,6 +120,17 @@ public class MyProfileRecordsAdapter extends RecyclerView.Adapter<MyProfileRecor
                             Toast.LENGTH_LONG).show();
                 }
                 holder.imageIV.setImageBitmap(imageBitmap);
+                holder.imageIV.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        StaticClass.viewFullScreen(context,
+                                holder.titleTV.getText().toString(),
+                                holder.descriptionTV.getText().toString(),
+                                imageString,
+                                StaticClass.IMAGE_VIEW, StaticClass.My_PROFILE_RECORDS,
+                                StaticClass.myProfileID);
+                    }
+                });
             }
         }else{ // no image
             holder.viewPager.setVisibility(View.GONE);
@@ -152,7 +174,7 @@ public class MyProfileRecordsAdapter extends RecyclerView.Adapter<MyProfileRecor
         MyProfileDAO myProfileDAO;
         MyProfileRecordDAO myProfileRecordDAO;
 
-        ViewPager viewPager;
+        ClickableViewPager viewPager;
         CustomPagerAdapter pagerAdapter;
         ArrayList<Bitmap> pagerImagesList;
         LinearLayout dotLayout;
